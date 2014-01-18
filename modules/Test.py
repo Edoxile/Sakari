@@ -22,7 +22,8 @@ class Test(Module):
     def get_hooks(self):
         return [
             ('test', self.test),
-            ('ntest', self.ntest)
+            ('ntest', self.ntest),
+            ('raw', self.raw)
         ]
 
     def test(self, c, e, args):
@@ -30,3 +31,6 @@ class Test(Module):
 
     def ntest(self, c, e, args):
         c.notice(e.source.nick, "Test called successfully! Args: {%s}" % ", ".join(args))
+
+    def raw(self, c, e, args):
+        c.send_raw(" ".join(args))
