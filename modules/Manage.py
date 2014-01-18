@@ -52,6 +52,7 @@ class Manage(AuthModule):
                 self.bot.unload_module(m)
                 c.privmsg(get_target(c, e), "\x02%s\x0f unloaded successfully!" % m)
             except SakariException as ex:
+                print("halp")
                 c.privmsg(get_target(c, e), "Couldn't unload \x02%s\x0f: %s" % (m, ex.error))
 
     def join(self, c, e, args):
