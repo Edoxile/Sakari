@@ -85,7 +85,10 @@ class Sakari(irc.bot.SingleServerIRCBot):
             else:
                 raise SakariException("Module %s already loaded!" % mn)
         else:
-            mod = __import__('modules.' + mn, fromlist=[mn])
+            try:
+                mod = __import__('modules.' + mn, fromlist=[mn])
+            except ImportError:
+                raise SakariException("Tried importing a module that does not exist {}".format(mn))
             clazz = getattr(mod, mn)
             m = clazz(self)
             if not isinstance(m, Module):
@@ -134,7 +137,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
         if hooks is None:
             hooks = m.get_hooks
         for (c, f) in hooks:
-            del self.commands[c]
+            del self.commands[c]       
 
 
 if __name__ == "__main__":
