@@ -37,6 +37,7 @@ class Manage(AuthModule):
         modules = [n.split(',') for n in args]
         for m in modules:
             try:
+                print(m)
                 self.bot.load_module(m)
                 c.privmsg(get_target(c, e), "\x02%s\x0f loaded successfully!" % m)
             except SakariException as ex:
