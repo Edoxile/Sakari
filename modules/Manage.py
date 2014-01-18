@@ -17,6 +17,7 @@ from modules.AuthModule import AuthModule, get_target
 from sakari import SakariException
 
 import itertools
+import threading
 
 __author__ = 'Edoxile'
 
@@ -39,7 +40,7 @@ class Manage(AuthModule):
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
             try:
-                print(m)
+                print(threading.current_thread())
                 self.bot.load_module(m)
                 c.privmsg(get_target(c, e), "\x02%s\x0f loaded successfully!" % m)
             except SakariException as ex:

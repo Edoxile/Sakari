@@ -23,6 +23,7 @@ import irc.bot
 import irc.connection
 from modules.Module import Module
 from configparser import ConfigParser
+import threading
 
 try:
     from importlib import import_module
@@ -90,6 +91,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
                 self._register_commands(self.modules[mn])
                 self.modules[mn].active = True
             else:
+                print(threading.current_thread())
                 raise SakariException("Module %s already loaded!" % mn)
         else:
             try:
