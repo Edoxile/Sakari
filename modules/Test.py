@@ -33,4 +33,5 @@ class Test(Module):
         c.notice(e.source.nick, "Test called successfully! Args: {%s}" % ", ".join(args))
 
     def raw(self, c, e, args):
+        print("Sending raw command: '{}'".format(" ".join(args)))
         c.send_raw(" ".join(args))
