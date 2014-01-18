@@ -24,4 +24,4 @@ class Test(Module):
         return [('test', self.test)]
 
     def test(self, c, e, args):
-        c.privmsg(get_target(c, e), "Test called successfully! Args: {%s}" % ", ".join(args))
+        c.notice(get_target(c, e), "Test called successfully! Args: {%s}" % ", ".join(args))

@@ -58,7 +58,7 @@ class Manage(AuthModule):
         pass
 
     def list(self, c, e, args):
-        if args[0] == 'modules':
+        if len(args) and args[0] == 'modules':
             ms = self.bot.modules.values()
             response = "\x02Active:\x0f " + ", ".join(x.get_name() for x in ms if x.active)
             response += ". \x02Inactive:\x0f " + ", ".join(x.get_name() for x in ms if not x.active)
