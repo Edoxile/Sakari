@@ -24,6 +24,11 @@ import irc.connection
 from modules.Module import Module
 from configparser import ConfigParser
 
+try:
+    import importlib.import_module
+except ImportError:
+    import_module = __import__
+
 
 class SakariException(Exception):
     def __init__(self, error, data=None):
@@ -88,7 +93,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
                 raise SakariException("Module %s already loaded!" % mn)
         else:
             try:
-                mod = __import__('modules.' + mn, fromlist=[mn])
+                mod = import_module('modules.' + mn)
             except ImportError:
                 raise SakariException("Tried importing a module that does not exist {}".format(mn))
             clazz = getattr(mod, mn)
