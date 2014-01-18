@@ -13,26 +13,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
-__author__ = 'Edoxile'
+from modules.Module import Module, get_target
 from abc import ABCMeta, abstractmethod
 
+__author__ = 'Edoxile'
 
-class Module:
+
+class AuthModule(Module):
     __metaclass__ = ABCMeta
-
-    def __init__(self, b):
-        self.bot = b
-        print("Module " + self.get_name() + " loaded successfully!")
-        self.active = False
 
     @abstractmethod
     def get_hooks(self):
-        pass
+        super().get_hooks()
 
-    def get_name(self):
-        return self.__class__.__name__
+    def get_auth_level(self, c, e):
+        auth = self.bot.get_module('Auth')
+        return auth.get_level(c, e)
 
-
-def get_target(c, e):
-    return e.source.nick if e.target==c.get_nickname() else e.target
+    def is_authorized(self, c, e, r):
+        return self.get_auth_level(c, e) >= r

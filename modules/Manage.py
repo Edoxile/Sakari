@@ -13,13 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from modules.Module import Module
+from modules.AuthModule import AuthModule, get_target
 from sakari import SakariException
 
 __author__ = 'Edoxile'
 
 
-class Manage(Module):
+class Manage(AuthModule):
     def get_hooks(self):
         return [
             ('list', self.list),
@@ -38,28 +38,28 @@ class Manage(Module):
         for m in modules:
             try:
                 self.bot.load_module(m)
-                c.privmsg(e.target, "\x02%s\x00 loaded successfully!" % m)
+                c.privmsg(get_target(c, e), "\x02%s\x0f loaded successfully!" % m)
             except SakariException as ex:
-                c.privmsg(e.target, "Couldn't load \x02%s\x00: %s" % (m, ex.error))
+                c.privmsg(get_target(c, e), "Couldn't load \x02%s\x0f: %s" % (m, ex.error))
 
     def unload(self, c, e, args):
         modules = [n.split(',') for n in args]
         for m in modules:
             try:
                 self.bot.unload_module(m)
-                c.privmsg(e.target, "\x02%s\x00 unloaded successfully!" % m)
+                c.privmsg(get_target(c, e), "\x02%s\x0f unloaded successfully!" % m)
             except SakariException as ex:
-                c.privmsg(e.target, "Couldn't unload \x02%s\x00: %s" % (m, ex.error))
+                c.privmsg(get_target(c, e), "Couldn't unload \x02%s\x0f: %s" % (m, ex.error))
 
     def join(self, c, e, args):
-        c.join(args[0])
+        pass
 
     def part(self, c, e, args):
-        c.part(args[0])
+        pass
 
     def list(self, c, e, args):
         if args[0] == 'modules':
             ms = self.bot.modules.values()
-            response = "\x02Active:\x0F " + ", ".join(x.get_name() for x in ms if x.active)
-            response += ". \x02Inactive:\x0F " + ", ".join(x.get_name() for x in ms if not x.active)
-            c.privmsg(e.target, response)
+            response = "\x02Active:\x0f " + ", ".join(x.get_name() for x in ms if x.active)
+            response += ". \x02Inactive:\x0f " + ", ".join(x.get_name() for x in ms if not x.active)
+            c.privmsg(get_target(c, e), response)
