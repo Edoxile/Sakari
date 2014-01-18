@@ -36,7 +36,7 @@ class Manage(AuthModule):
         self.bot.die()
 
     def load(self, c, e, args):
-        modules = itertools.chain([n.split(',') for n in args])
+        modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
             try:
                 print(m)
