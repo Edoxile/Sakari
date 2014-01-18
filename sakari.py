@@ -142,4 +142,8 @@ class Sakari(irc.bot.SingleServerIRCBot):
 
 if __name__ == "__main__":
     sakari = Sakari()
-    sakari.start()
+
+    try:
+        sakari.start()
+    except KeyboardInterrupt:
+        sakari.die("Killed by Ctrl+C")
