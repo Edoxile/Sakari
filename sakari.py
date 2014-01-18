@@ -23,7 +23,6 @@ import irc.bot
 import irc.connection
 from modules.Module import Module
 from configparser import ConfigParser
-from pprint import pprint
 
 
 class SakariException(Exception):
@@ -62,7 +61,10 @@ class Sakari(irc.bot.SingleServerIRCBot):
         c.join(self.channel)
 
     def on_privmsg(self, c, e):
-        self.do_command(e, e.arguments[0])
+        a = e.arguments[0].split(" ")
+        if len(a[0]) > 1 and a[0][0] == '~':
+            self.do_command(e, a[0][1:], a[1:])
+        return
 
     def on_pubmsg(self, c, e):
         a = e.arguments[0].split(" ")

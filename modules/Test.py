@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from modules.Module import Module
+from modules.Module import Module, get_target
 
 __author__ = 'Edoxile'
 
@@ -24,4 +24,4 @@ class Test(Module):
         return [('test', self.test)]
 
     def test(self, c, e, args):
-        c.privmsg(e.target, "Test called successfully! Args: {%s}" % ", ".join(args))
+        c.privmsg(get_target(c, e), "Test called successfully! Args: {%s}" % ", ".join(args))
