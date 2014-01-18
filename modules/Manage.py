@@ -26,6 +26,7 @@ class Manage(AuthModule):
     def get_hooks(self):
         return [
             ('list', self.list),
+            ('reload', self.reload),
             ('load', self.load),
             ('unload', self.unload),
             ('join', self.join),
@@ -36,25 +37,38 @@ class Manage(AuthModule):
     def die(self, c, e, args):
         self.bot.die()
 
+    def reload(self, c, e, args):
+        modules = itertools.chain.from_iterable([n.split(',') for n in args])
+        for m in modules:
+            try:
+                self.bot.unload_module(m)
+                self.bot.load_module(m)
+                c.privmsg(get_target(c, e), "\x02{}\x0f reloaded successfully!".format(m))
+            except SakariException as ex:
+                c.privmsg(get_target(c, e), "Couldn't reload \x02{}\x0f: %s".format(m, ex.error))
+
     def load(self, c, e, args):
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
             try:
                 print(threading.current_thread())
                 self.bot.load_module(m)
-                c.privmsg(get_target(c, e), "\x02%s\x0f loaded successfully!" % m)
+                c.privmsg(get_target(c, e), "\x02{}\x0f loaded successfully!".format(m))
             except SakariException as ex:
-                c.privmsg(get_target(c, e), "Couldn't load \x02%s\x0f: %s" % (m, ex.error))
+                c.privmsg(get_target(c, e), "Couldn't load \x02{}\x0f: {}".format((m, ex.error)))
+            except:
+                c.privmsg(get_target(c, e), "Unknown error while loading {}.".format(m))
 
     def unload(self, c, e, args):
-        modules = [n.split(',') for n in args]
+        modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
             try:
                 self.bot.unload_module(m)
-                c.privmsg(get_target(c, e), "\x02%s\x0f unloaded successfully!" % m)
-            except:
-                print("halp")
-                c.privmsg(get_target(c, e), "Couldn't unload \x02%s\x0f: %s" % (m, ex.error))
+                c.privmsg(get_target(c, e), "\x02{}\x0f unloaded successfully!".format(m))
+            except SakariException as ex:
+                c.privmsg(get_target(c, e), "Couldn't unload \x02{}\x0f: {}".format(m, ex.error))
+            except Exception as ex:
+                c.privmsg(get_target(c, e), "Unknown error while loading {}. Exception: {}".format(m, ex.__cause__))
 
     def join(self, c, e, args):
         pass
