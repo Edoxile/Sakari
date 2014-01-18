@@ -29,4 +29,4 @@ class Test(Module):
         c.privmsg(get_target(c, e), "Test called successfully! Args: {%s}" % ", ".join(args))
 
     def ntest(self, c, e, args):
-        c.notice(get_target(c, e), "Test called successfully! Args: {%s}" % ", ".join(args))
+        c.notice(e.source.nick, "Test called successfully! Args: {%s}" % ", ".join(args))
