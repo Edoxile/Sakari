@@ -16,6 +16,8 @@
 from modules.AuthModule import AuthModule, get_target
 from sakari import SakariException
 
+import itertools
+
 __author__ = 'Edoxile'
 
 
@@ -34,7 +36,7 @@ class Manage(AuthModule):
         self.bot.die()
 
     def load(self, c, e, args):
-        modules = [n.split(',') for n in args]
+        modules = itertools.chain([n.split(',') for n in args])
         for m in modules:
             try:
                 print(m)
