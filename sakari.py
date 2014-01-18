@@ -25,7 +25,7 @@ from modules.Module import Module
 from configparser import ConfigParser
 
 try:
-    import importlib.import_module
+    from importlib import import_module
 except ImportError:
     import_module = __import__
 
