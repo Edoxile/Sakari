@@ -19,9 +19,14 @@ __author__ = 'Edoxile'
 
 
 class Test(Module):
-
     def get_hooks(self):
-        return [('test', self.test)]
+        return [
+            ('test', self.test),
+            ('ntest', self.ntest)
+        ]
 
     def test(self, c, e, args):
+        c.privmsg(get_target(c, e), "Test called successfully! Args: {%s}" % ", ".join(args))
+
+    def ntest(self, c, e, args):
         c.notice(get_target(c, e), "Test called successfully! Args: {%s}" % ", ".join(args))
