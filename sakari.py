@@ -51,8 +51,8 @@ class Sakari(irc.bot.SingleServerIRCBot):
         )
         self.channel = self.config.get("server", "channel")
         self.prefix = self.config.get("bot", "command_prefix")
-        self.commands = {}
-        self.modules = {}
+        self.commands = dict()
+        self.modules = dict()
         for m in self.config.get("bot", "default_modules").split(","):
             try:
                 self.load_module(m)
