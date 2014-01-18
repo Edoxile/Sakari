@@ -44,7 +44,7 @@ class Manage(AuthModule):
                 self.bot.load_module(m)
                 c.privmsg(get_target(c, e), "\x02{}\x0f reloaded successfully!".format(m))
             except SakariException as ex:
-                c.privmsg(get_target(c, e), "Couldn't reload \x02{}\x0f: %s".format((m, ex.error)))
+                c.privmsg(get_target(c, e), "Couldn't reload \x02{}\x0f: %s".format(m, ex.error))
 
     def load(self, c, e, args):
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
@@ -64,9 +64,9 @@ class Manage(AuthModule):
                 self.bot.unload_module(m)
                 c.privmsg(get_target(c, e), "\x02{}\x0f unloaded successfully!".format(m))
             except SakariException as ex:
-                c.privmsg(get_target(c, e), "Couldn't unload \x02{}\x0f: {}".format((m, ex.error)))
+                c.privmsg(get_target(c, e), "Couldn't unload \x02{}\x0f: {}".format(m, ex.error))
             except Exception as ex:
-                c.privmsg(get_target(c, e), "Unknown error while loading {}. Exception: {}".format((m, ex.__cause__)))
+                c.privmsg(get_target(c, e), "Unknown error while loading {}. Exception: {}".format(m, ex.__cause__))
 
     def join(self, c, e, args):
         pass
