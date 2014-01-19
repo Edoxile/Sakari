@@ -32,11 +32,12 @@ class Choose(Module):
         args = [int(n) for n in args]
         if len(args) == 1:
             val = random.randint(0, args[0])
+            c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
         elif len(args) == 2:
             if args[0] > args[1]:
                 (args[0], args[1]) = (args[1], args[0])
             val = random.randint(args[0], args[1])
-        c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
+            c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
 
     def choose(self, c, e, args):
         pass
