@@ -27,7 +27,7 @@ class Auth(Module):
         # User 'objects' consist of a dict with {nick: (username, ip, level)}
         self.users = {}
 
-    def get_hooks(self):
+    def get_commands(self):
         return [
             ('login', self.login),
             ('logout', self.logout),

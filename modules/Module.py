@@ -27,7 +27,7 @@ class Module:
         self.active = False
 
     @abstractmethod
-    def get_hooks(self):
+    def get_commands(self):
         pass
 
     def get_name(self):

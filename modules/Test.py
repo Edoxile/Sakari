@@ -19,7 +19,7 @@ __author__ = 'Edoxile'
 
 
 class Test(Module):
-    def get_hooks(self):
+    def get_commands(self):
         return [
             ('test', self.test),
             ('ntest', self.ntest),

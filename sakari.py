@@ -124,17 +124,17 @@ class Sakari(irc.bot.SingleServerIRCBot):
 
     def _register_commands(self, m):
         #check if hooks are available
-        dupe = [i for i in [n[0] for n in m.get_hooks()] if i in self.commands.keys()]
+        dupe = [i for i in [n[0] for n in m.get_commands()] if i in self.commands.keys()]
         if dupe:
             return dupe
         else:
-            for (c, f) in m.get_hooks():
+            for (c, f) in m.get_commands():
                 self.commands.update({c: (m, f)})
             return []
 
     def _remove_commands(self, m, hooks=None):
         if not hooks:
-            hooks = m.get_hooks()
+            hooks = m.get_commands()
         for (c, f) in hooks:
             del self.commands[c]
 

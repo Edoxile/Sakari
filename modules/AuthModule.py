@@ -24,8 +24,8 @@ class AuthModule(Module):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def get_hooks(self):
-        super().get_hooks()
+    def get_commands(self):
+        super().get_commands()
 
     def get_auth_level(self, c, e):
         try:

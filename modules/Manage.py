@@ -22,7 +22,7 @@ __author__ = 'Edoxile, windwarrior'
 
 
 class Manage(AuthModule):
-    def get_hooks(self):
+    def get_commands(self):
         return [
             ('list', self.list),
             ('reload', self.reload),

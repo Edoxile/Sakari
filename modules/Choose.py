@@ -22,7 +22,7 @@ __author__ = 'windwarrior, Edoxile'
 
 
 class Choose(Module):
-    def get_hooks(self):
+    def get_commands(self):
         return [
             ('random', self.random),
             ('choose', self.choose)
