@@ -83,6 +83,7 @@ class Manage(AuthModule):
     def update(self, c, e, args):
         try:
             response = check_output(['git', 'pull'])
-            c.privmsg(get_target(c, e), response.decode('utf-8'))
+            for msg in response.decode('utf-8').split("\n"):
+                c.privmsg(get_target(c, e), msg)
         except CalledProcessError as ex:
             c.privmsg(get_target(c, e), "Error on calling 'git pull': {}".format(ex.output))
