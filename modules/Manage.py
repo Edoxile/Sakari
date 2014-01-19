@@ -55,7 +55,7 @@ class Manage(AuthModule):
                 self.bot.load_module(m)
                 c.privmsg(get_target(c, e), "\x02{}\x0f loaded successfully!".format(m))
             except SakariException as ex:
-                c.privmsg(get_target(c, e), "Couldn't load \x02{}\x0f: {}".format((m, ex.error)))
+                c.privmsg(get_target(c, e), "Couldn't load \x02{}\x0f: {}".format(m, ex.error))
 
     def unload(self, c, e, args):
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
