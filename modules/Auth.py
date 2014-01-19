@@ -45,9 +45,9 @@ class Auth(Module):
             level = cursor.fetchone()
             if level is not None:
                 self.users.update({e.source.nick: (args[0], e.source, int(level[0]))})
-                c.privmsg("Logged in successfully!")
+                c.privmsg(get_target(c, e), "Logged in successfully!")
             else:
-                c.privmsg("The username/password combination is not known.")
+                c.privmsg(get_target(c, e), "The username/password combination is not known.")
 
     def logout(self, c, e, args):
         if e.source.nick in self.users.keys():
