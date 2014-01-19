@@ -46,7 +46,10 @@ class Choose(Module):
             val = random.randint(args[0], args[1])
             c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
         else:
-            c.privmsg(get_target(c, e), "Usage: choose x y")
+            c.privmsg(get_target(c, e), "Usage: \x02random\0xf <x> [y]")
 
     def choose(self, c, e, args):
-        pass
+        if len(args) > 0:
+            c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(args.choice()))
+        else:
+            c.privmsg(get_target(c, e), "Usage: \x02choose\0xf [x..]")
