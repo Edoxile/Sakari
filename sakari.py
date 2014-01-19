@@ -136,7 +136,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
 
     def _remove_commands(self, m, hooks=None):
         if not hooks:
-            hooks = m.get_hooks
+            hooks = m.get_hooks()
         for (c, f) in hooks:
             del self.commands[c]       
 
