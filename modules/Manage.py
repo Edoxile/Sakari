@@ -56,8 +56,6 @@ class Manage(AuthModule):
                 c.privmsg(get_target(c, e), "\x02{}\x0f loaded successfully!".format(m))
             except SakariException as ex:
                 c.privmsg(get_target(c, e), "Couldn't load \x02{}\x0f: {}".format((m, ex.error)))
-            except:
-                c.privmsg(get_target(c, e), "Unknown error while loading {}.".format(m))
 
     def unload(self, c, e, args):
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
@@ -67,8 +65,6 @@ class Manage(AuthModule):
                 c.privmsg(get_target(c, e), "\x02{}\x0f unloaded successfully!".format(m))
             except SakariException as ex:
                 c.privmsg(get_target(c, e), "Couldn't unload \x02{}\x0f: {}".format(m, ex.error))
-            except Exception as ex:
-                c.privmsg(get_target(c, e), "Unknown error while loading {}. Exception: {}".format(m, ex.__cause__))
 
     def join(self, c, e, args):
         pass
