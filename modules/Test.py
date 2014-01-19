@@ -23,7 +23,8 @@ class Test(Module):
         return [
             ('test', self.test),
             ('ntest', self.ntest),
-            ('raw', self.raw)
+            ('raw', self.raw),
+            ('blub', self.blub)
         ]
 
     def test(self, c, e, args):
@@ -35,3 +36,6 @@ class Test(Module):
     def raw(self, c, e, args):
         print("Sending raw command: '{}'".format(" ".join(args)))
         c.send_raw(" ".join(args))
+
+    def blub(self, c, e, args):
+        c.privmsg(get_target(c, e), "blab")

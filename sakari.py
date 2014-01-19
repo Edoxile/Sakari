@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from imp import reload
 
 __author__ = 'Edoxile'
 
@@ -80,6 +81,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
     def load_module(self, mn):
         if mn in self.modules.keys():
             if not self.modules[mn].active:
+                reload(self.modules[mn].__class__)
                 self._register_commands(self.modules[mn])
                 self.modules[mn].active = True
             else:
