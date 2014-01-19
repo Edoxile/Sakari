@@ -28,5 +28,8 @@ class Choose(Module):
             except:
                 c.privmsg(get_target(c, e), "One of \x02{}\x0f is no number!".format(args))
 
+    def choose(self, c, e, args):
+        pass
+
     def get_name(self):
         return self.__class__.__name__
