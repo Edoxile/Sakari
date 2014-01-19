@@ -65,15 +65,15 @@ class Auth(Module):
         else:
             data = self.users[e.source.nick]
             c.privmsg(get_target(c, e),
-                      "You're logged in as \x02%s\x0f with access level \x02%i\x0f." % (data[0], data[2]))
+                      "You're logged in as \x02{}\x0f with access level \x02{}\x0f.".format(data[0], data[2]))
 
     def whois(self, c, e, args):
         if args[0] in self.users.keys():
             data = self.users[e.source.nick]
             c.privmsg(get_target(c, e),
-                      "You're logged in as \x02%s\x0f with access level \x02%i\x0f." % (data[0], data[2]))
+                      "You're logged in as \x02{}\x0f with access level \x02{}\x0f.".format(data[0], data[2]))
         else:
-            c.privmsg(get_target(c, e), "%s is not logged in at the moment." % args[0])
+            c.privmsg(get_target(c, e), "{} is not logged in at the moment.".format(args[0]))
 
     def get_level(self, c, e):
         if e.source.nick in self.users.keys():

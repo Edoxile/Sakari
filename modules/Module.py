@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from abc import ABCMeta, abstractmethod
 
 __author__ = 'Edoxile'
-from abc import ABCMeta, abstractmethod
 
 
 class Module:
@@ -35,4 +35,4 @@ class Module:
 
 
 def get_target(c, e):
-    return e.source.nick if e.target==c.get_nickname() else e.target
+    return e.source.nick if e.target == c.get_nickname() else e.target

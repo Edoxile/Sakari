@@ -28,10 +28,10 @@ class Test(Module):
         ]
 
     def test(self, c, e, args):
-        c.privmsg(get_target(c, e), "Test called successfully! Args: {%s}" % ", ".join(args))
+        c.privmsg(get_target(c, e), "Test called successfully! Args: {}".format(args))
 
     def ntest(self, c, e, args):
-        c.notice(e.source.nick, "Test called successfully! Args: {%s}" % ", ".join(args))
+        c.notice(e.source.nick, "Test called successfully! Args: {}".format(args))
 
     def raw(self, c, e, args):
         print("Sending raw command: '{}'".format(" ".join(args)))

@@ -16,22 +16,21 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from imp import reload
-
-__author__ = 'Edoxile'
-
 import ssl
 import irc.bot
 import irc.connection
 from modules.Module import Module
 from configparser import ConfigParser
 import threading
-
 from exceptions import SakariException
 
 try:
     from importlib import import_module
 except ImportError:
     import_module = __import__
+
+__author__ = 'Edoxile, windwarrior'
+
 
 class Sakari(irc.bot.SingleServerIRCBot):
     def __init__(self):
@@ -140,7 +139,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
         if not hooks:
             hooks = m.get_hooks()
         for (c, f) in hooks:
-            del self.commands[c]       
+            del self.commands[c]
 
 
 if __name__ == "__main__":

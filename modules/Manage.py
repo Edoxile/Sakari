@@ -19,7 +19,7 @@ from exceptions import SakariException
 import itertools
 import threading
 
-__author__ = 'Edoxile'
+__author__ = 'Edoxile, windwarrior'
 
 
 class Manage(AuthModule):
