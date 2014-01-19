@@ -29,7 +29,14 @@ class Choose(Module):
         ]
 
     def random(self, c, e, args):
-        args = [int(n) for n in args]
+        current = arg[0]
+        try:
+            for n in range(args):
+                current = args[n]
+                args[n] = int(current)
+        except ValueError:
+            c.privmsg(get_target(c,e), "\x02{}\x0f is no number!".format(current))
+
         if 0 < len(args) <= 2: 
             if len(args) == 1:
                 args.append(0)
@@ -37,6 +44,8 @@ class Choose(Module):
                 (args[0], args[1]) = (args[1], args[0])
             val = random.randint(args[0], args[1])
             c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
+        else:
+            c.privmsg(get_target(c, e), "Usage: choose x y"
 
     def choose(self, c, e, args):
         pass
