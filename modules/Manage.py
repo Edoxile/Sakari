@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from modules.AuthModule import AuthModule, get_target
 from exceptions import SakariException
-
+from subprocess import check_output, CalledProcessError
 import itertools
 import threading
 
@@ -31,7 +31,8 @@ class Manage(AuthModule):
             ('unload', self.unload),
             ('join', self.join),
             ('part', self.part),
-            ('die', self.die)
+            ('die', self.die),
+            ('update', self.update)
         ]
 
     def die(self, c, e, args):
@@ -78,3 +79,10 @@ class Manage(AuthModule):
             response = "\x02Active:\x0f " + ", ".join(x.get_name() for x in ms if x.active)
             response += ". \x02Inactive:\x0f " + ", ".join(x.get_name() for x in ms if not x.active)
             c.privmsg(get_target(c, e), response)
+
+    def update(self, c, e, args):
+        try:
+            response = check_output(['git', 'pull'])
+            c.privmsg(get_target(c, e), response)
+        except CalledProcessError as ex:
+            c.privmsg(get_target(c, e), "Error on calling 'git pull': {}".format(ex.output))
