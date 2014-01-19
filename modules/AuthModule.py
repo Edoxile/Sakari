@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from exceptions import SakariException
 from modules.Module import Module, get_target
 from abc import ABCMeta, abstractmethod
 
@@ -27,8 +28,12 @@ class AuthModule(Module):
         super().get_hooks()
 
     def get_auth_level(self, c, e):
-        auth = self.bot.get_module('Auth')
-        return auth.get_level(c, e)
+        try:
+            auth = self.bot.get_module('Auth')
+            return auth.get_level(c, e)
+        except SakariException as ex:
+            c.privmsg(get_target(c, e), "Couldn't fetch auth level. Error: {}".format(ex.error))
+            return 0
 
     def is_authorized(self, c, e, r):
         return self.get_auth_level(c, e) >= r

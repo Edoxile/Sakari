@@ -35,9 +35,15 @@ class Manage(AuthModule):
         ]
 
     def die(self, c, e, args):
+        if not self.is_authorized(c, e, 5):
+            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            return
         self.bot.die()
 
     def reload(self, c, e, args):
+        if not self.is_authorized(c, e, 5):
+            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            return
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
             try:
@@ -48,6 +54,9 @@ class Manage(AuthModule):
                 c.privmsg(get_target(c, e), "Couldn't reload \x02{}\x0f: %s".format(m, ex.error))
 
     def load(self, c, e, args):
+        if not self.is_authorized(c, e, 5):
+            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            return
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
             try:
@@ -57,6 +66,9 @@ class Manage(AuthModule):
                 c.privmsg(get_target(c, e), "Couldn't load \x02{}\x0f: {}".format(m, ex.error))
 
     def unload(self, c, e, args):
+        if not self.is_authorized(c, e, 5):
+            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            return
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
             try:
@@ -79,6 +91,9 @@ class Manage(AuthModule):
             c.privmsg(get_target(c, e), response)
 
     def update(self, c, e, args):
+        if not self.is_authorized(c, e, 5):
+            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            return
         try:
             response = check_output(['git', 'pull'])
             for msg in response.decode('utf-8').split("\n"):
