@@ -1,4 +1,6 @@
-class Module:
+from modules.Module import Module, get_target
+
+class Choose(Module):
     def __init__(self, b):
         self.bot = b
         print("Module " + self.get_name() + " loaded successfully!")
