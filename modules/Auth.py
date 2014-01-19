@@ -58,17 +58,17 @@ class Auth(Module):
 
     def whoami(self, c, e, args):
         if e.source.nick in self.users.keys():
-            c.privmsg(get_target(c, e), "You're not logged in at the moment")
-        else:
             data = self.users[e.source.nick]
             c.privmsg(get_target(c, e),
                       "You're logged in as \x02{}\x0f with access level \x02{}\x0f.".format(data[0], data[2]))
+        else:
+            c.privmsg(get_target(c, e), "You're not logged in at the moment")
 
     def whois(self, c, e, args):
         if args[0] in self.users.keys():
             data = self.users[e.source.nick]
             c.privmsg(get_target(c, e),
-                      "You're logged in as \x02{}\x0f with access level \x02{}\x0f.".format(data[0], data[2]))
+                      "\x02{}\x0f is logged in with access level \x02{}\x0f.".format(data[0], data[2]))
         else:
             c.privmsg(get_target(c, e), "{} is not logged in at the moment.".format(args[0]))
 
