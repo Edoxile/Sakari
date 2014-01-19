@@ -29,27 +29,14 @@ class Choose(Module):
         ]
 
     def random(self, c, e, args):
-        current = args[0]
-        try:
-            for n in range(len(args)):
-                current = args[n]
-                args[n] = int(current)
-        except ValueError:
-            c.privmsg(get_target(c,e), "\x02{}\x0f is no number!".format(current))
-            return
-
-        if 0 < len(args) <= 2: 
-            if len(args) == 1:
-                args.append(0)
+        args = [int(n) for n in args]
+        if len(args) == 1:
+            val = random.randint(0, args[0])
+        elif len(args) == 2:
             if args[0] > args[1]:
                 (args[0], args[1]) = (args[1], args[0])
             val = random.randint(args[0], args[1])
-            c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
-        else:
-            c.privmsg(get_target(c, e), "Usage: \x02random\0xf <x> [y]")
+        c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
 
     def choose(self, c, e, args):
-        if len(args) > 0:
-            c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(random.choice(args)))
-        else:
-            c.privmsg(get_target(c, e), "Usage: \x02choose\0xf [x..]")
+        pass
