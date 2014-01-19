@@ -83,9 +83,12 @@ class Manage(AuthModule):
             c.join(ch)
 
     def part(self, c, e, args):
-        print("Parting channels {}.".format(args[0].split(',')))
-        for ch in args[0].split(','):
-            c.part(ch, ' '.join(args[1:]))
+        if len(args) > 0:
+            print("Parting channels {}.".format(args[0].split(',')))
+            for ch in args[0].split(','):
+                c.part(ch, ' '.join(args[1:]))
+        else:
+            c.part(e.target)
 
     def list(self, c, e, args):
         if len(args) and args[0] == 'modules':
