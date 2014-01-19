@@ -44,7 +44,7 @@ class Auth(Module):
             cursor.execute("SELECT level FROM users WHERE username=? AND password=?", (args[0], args[1]))
             level = cursor.fetchone()
             if level is not None:
-                self.users.update({e.source.nick: (args[0], e.source, int(level))})
+                self.users.update({e.source.nick: (args[0], e.source, int(level[0]))})
                 c.privmsg("Logged in successfully!")
             else:
                 c.privmsg("The username/password combination is not known.")
