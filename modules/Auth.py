@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import hashlib
 from modules.Module import Module, get_target
-from mysql import connector
+import sqlite3
 
 __author__ = 'Edoxile'
 
@@ -23,11 +23,7 @@ __author__ = 'Edoxile'
 class Auth(Module):
     def __init__(self, b):
         super().__init__(b)
-        self.mysql = connector.connect(
-            user=self.bot.config.get('mysql', 'user'),
-            password=self.bot.config.get('mysql', 'pass'),
-            database=self.bot.config.get('mysql', 'database')
-        )
+        self.sqlite = sqlite3.connect('sakari.sqlite')
         # User 'objects' consist of a dict with {nick: (username, ip, level)}
         self.users = {}
 
@@ -44,12 +40,13 @@ class Auth(Module):
             c.privmsg(get_target(c, e), "Already logged in as %s." % self.users[e.source.nick][1])
         else:
             args[1] = hashlib.sha512(args[1].encode('utf-8')).hexdigest()
-            cursor = self.mysql.cursor()
-            cursor.execute("SELECT level FROM users WHERE username=%s AND password=%s", (args[0], args[1]))
-            for level in cursor:
+            cursor = self.sqlite.cursor()
+            cursor.execute("SELECT level FROM users WHERE username=? AND password=?", (args[0], args[1]))
+            level = cursor.fetchone()
+            if level is not None:
                 self.users.update({e.source.nick: (args[0], e.source, int(level))})
                 c.privmsg("Logged in successfully!")
-            if e.source.nick not in self.users.keys():
+            else:
                 c.privmsg("The username/password combination is not known.")
 
     def logout(self, c, e, args):

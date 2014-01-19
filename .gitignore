@@ -1,5 +1,6 @@
 # Config file
 sakari.cfg
+sakari.sqlite
 
 *.py[cod]
 
