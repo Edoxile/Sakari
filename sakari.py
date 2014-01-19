@@ -81,34 +81,37 @@ class Sakari(irc.bot.SingleServerIRCBot):
         if mn in self.modules.keys():
             if not self.modules[mn].active:
                 reload(sys.modules[self.modules[mn].__module__])
-                self._register_commands(self.modules[mn])
-                self.modules[mn].active = True
             else:
                 raise SakariException("Module {} already loaded!".format(mn))
+        try:
+            mod = import_module('modules.' + mn)
+        except ImportError:
+            raise SakariException("Tried importing a module that does not exist {}".format(mn))
+        clazz = getattr(mod, mn)
+        m = clazz(self)
+        if not isinstance(m, Module):
+            raise SakariException("Object given to load_module, but object is not an instance of Module")
         else:
-            try:
-                mod = import_module('modules.' + mn)
-            except ImportError:
-                raise SakariException("Tried importing a module that does not exist {}".format(mn))
-            clazz = getattr(mod, mn)
-            m = clazz(self)
-            if not isinstance(m, Module):
-                raise SakariException("Object given to load_module, but object is not an instance of Module")
+            dupe = self._register_commands(m)
+            if dupe:
+                raise SakariException("Duplicate command list found when loading module {}. Commands: {}".format(
+                    m.get_name(), dupe))
             else:
-                dupe = self._register_commands(m)
-                if dupe:
-                    raise SakariException("Duplicate command list found when loading module {}. Commands: {}".format(
-                        m.get_name(), dupe))
-                else:
-                    m.active = True
-                    self.modules.update({mn: m})
+                m.active = True
+                self.modules.update({mn: m})
 
     def unload_module(self, mn):
         if mn in self.modules.keys():
             self._remove_commands(self.modules[mn])
-            self.modules[mn].active = False
+            del self.modules[mn]
         else:
             raise SakariException("Module {} is not yet loaded!".format(mn))
+
+    def disable_module(self, mn):
+        pass
+
+    def enable_module(self, mn):
+        pass
 
     def get_module(self, mn):
         if mn in self.modules.keys():
