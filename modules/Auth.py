@@ -44,6 +44,7 @@ class Auth(Module):
             cursor.execute("SELECT level FROM users WHERE username=? AND password=?", (args[0], args[1]))
             level = cursor.fetchone()
             if level is not None:
+                print("{} logged in with username '{}' and host '{}'.".format(e.source.nick, args[0], e.source))
                 self.users.update({e.source.nick: (args[0], e.source, int(level[0]))})
                 c.privmsg(get_target(c, e), "Logged in successfully!")
             else:
@@ -68,7 +69,8 @@ class Auth(Module):
         if args[0] in self.users.keys():
             data = self.users[e.source.nick]
             c.privmsg(get_target(c, e),
-                      "\x02{}\x0f is logged in with access level \x02{}\x0f.".format(data[0], data[2]))
+                      "\x02{}\x0f is logged as \x02{}\x0f in with access level \x02{}\x0f.".format(e.source.nick,
+                                                                                                   data[0], data[2]))
         else:
             c.privmsg(get_target(c, e), "{} is not logged in at the moment.".format(args[0]))
 
