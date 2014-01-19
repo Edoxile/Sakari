@@ -78,10 +78,14 @@ class Manage(AuthModule):
                 c.privmsg(get_target(c, e), "Couldn't unload \x02{}\x0f: {}".format(m, ex.error))
 
     def join(self, c, e, args):
-        pass
+        print("Joining channels {}.".format(args[0].split(',')))
+        for ch in args[0].split(','):
+            c.join(ch)
 
     def part(self, c, e, args):
-        pass
+        print("Parting channels {}.".format(args[0].split(',')))
+        for ch in args[0].split(','):
+            c.part(ch, ' '.join(args[1:]))
 
     def list(self, c, e, args):
         if len(args) and args[0] == 'modules':
@@ -89,6 +93,8 @@ class Manage(AuthModule):
             response = "\x02Active:\x0f " + ", ".join(x.get_name() for x in ms if x.active)
             response += ". \x02Inactive:\x0f " + ", ".join(x.get_name() for x in ms if not x.active)
             c.privmsg(get_target(c, e), response)
+        elif len(args) and args[0] == 'channels':
+            c.privmsg(get_target(c, e), "\x02Channels:\x0f " + ', '.join(self.bot.channels.keys()) + '.')
 
     def update(self, c, e, args):
         if not self.is_authorized(c, e, 5):
