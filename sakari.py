@@ -19,6 +19,7 @@ from imp import reload
 import ssl
 import irc.bot
 import irc.connection
+import sys
 from modules.Module import Module
 from configparser import ConfigParser
 import threading
@@ -80,7 +81,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
     def load_module(self, mn):
         if mn in self.modules.keys():
             if not self.modules[mn].active:
-                reload(self.modules[mn].__class__)
+                reload(sys.modules[self.modules[mn].__module__])
                 self._register_commands(self.modules[mn])
                 self.modules[mn].active = True
             else:
