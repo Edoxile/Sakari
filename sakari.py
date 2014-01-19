@@ -22,7 +22,6 @@ import irc.connection
 import sys
 from modules.Module import Module
 from configparser import ConfigParser
-import threading
 from exceptions import SakariException
 
 try:
@@ -85,8 +84,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
                 self._register_commands(self.modules[mn])
                 self.modules[mn].active = True
             else:
-                print(threading.current_thread())
-                raise SakariException("Module %s already loaded!" % mn)
+                raise SakariException("Module {} already loaded!".format(mn))
         else:
             try:
                 mod = import_module('modules.' + mn)
@@ -99,8 +97,8 @@ class Sakari(irc.bot.SingleServerIRCBot):
             else:
                 dupe = self._register_commands(m)
                 if dupe:
-                    raise SakariException("Duplicate command list found when loading module %s. Commands: {%s}" % (
-                        m.get_name(), ", ".join(dupe)))
+                    raise SakariException("Duplicate command list found when loading module {}. Commands: {}".format(
+                        m.get_name(), dupe))
                 else:
                     m.active = True
                     self.modules.update({mn: m})
@@ -110,13 +108,13 @@ class Sakari(irc.bot.SingleServerIRCBot):
             self._remove_commands(self.modules[mn])
             self.modules[mn].active = False
         else:
-            raise SakariException("Module %s is not yet loaded!" % mn)
+            raise SakariException("Module {} is not yet loaded!".format(mn))
 
     def get_module(self, mn):
         if mn in self.modules.keys():
             return self.modules[mn]
         else:
-            raise SakariException("Module %s not loaded!" % mn)
+            raise SakariException("Module {} not loaded!".format(mn))
 
     @staticmethod
     def _mod_import(name):

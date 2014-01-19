@@ -18,7 +18,7 @@
 import random
 from modules.Module import Module, get_target
 
-__author__ = 'windwarrior'
+__author__ = 'windwarrior, Edoxile'
 
 
 class Choose(Module):
@@ -40,6 +40,3 @@ class Choose(Module):
 
     def choose(self, c, e, args):
         pass
-
-    def get_name(self):
-        return self.__class__.__name__
