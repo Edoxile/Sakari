@@ -29,7 +29,7 @@ class Choose(Module):
         ]
 
     def random(self, c, e, args):
-        current = arg[0]
+        current = args[0]
         try:
             for n in range(args):
                 current = args[n]
