@@ -23,7 +23,8 @@ class Test(Module):
         return [
             ('test', self.test),
             ('ntest', self.ntest),
-            ('raw', self.raw)
+            ('raw', self.raw),
+            ('blub', self.blub)
         ]
 
     def test(self, c, e, args):
