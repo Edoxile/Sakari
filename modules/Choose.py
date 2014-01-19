@@ -31,7 +31,7 @@ class Choose(Module):
     def random(self, c, e, args):
         current = args[0]
         try:
-            for n in range(args):
+            for n in range(len(args)):
                 current = args[n]
                 args[n] = int(current)
         except ValueError:
