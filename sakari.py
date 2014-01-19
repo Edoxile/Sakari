@@ -46,6 +46,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
         self.prefix = self.config.get("bot", "command_prefix")
         self.commands = dict()
         self.modules = dict()
+        self.hooks = dict()
         for m in self.config.get("bot", "default_modules").split(","):
             try:
                 self.load_module(m)
@@ -61,21 +62,48 @@ class Sakari(irc.bot.SingleServerIRCBot):
     def on_privmsg(self, c, e):
         a = e.arguments[0].split(" ")
         if len(a[0]) > 1 and a[0][0] == '~':
-            self.do_command(e, a[0][1:], a[1:])
-        return
+            self._do_command(e, a[0][1:], a[1:])
 
     def on_pubmsg(self, c, e):
         a = e.arguments[0].split(" ")
         if len(a[0]) > 1 and a[0][0] == '~':
-            self.do_command(e, a[0][1:], a[1:])
-        return
+            self._do_command(e, a[0][1:], a[1:])
 
-    def do_command(self, e, cmd, args):
-        c = self.connection
+    def on_error(self, c, e):
+        pass
 
-        if cmd in self.commands.keys():
-            (m, f) = self.commands[cmd]
-            f(c, e, args)
+    def on_join(self, c, e):
+        pass
+
+    def on_kick(self, c, e):
+        pass
+
+    def on_mode(self, c, e):
+        pass
+
+    def on_part(self, c, e):
+        pass
+
+    def on_privnotice(self, c, e):
+        pass
+
+    def on_pubbnotice(self, c, e):
+        pass
+
+    def on_quit(self, c, e):
+        pass
+
+    def on_invite(self, c, e):
+        pass
+
+    def on_action(self, c, e):
+        pass
+
+    def on_topic(self, c, e):
+        pass
+
+    def on_nick(self, c, e):
+        pass
 
     def load_module(self, mn):
         if mn in self.modules.keys():
@@ -114,6 +142,12 @@ class Sakari(irc.bot.SingleServerIRCBot):
         else:
             raise SakariException("Module {} not loaded!".format(mn))
 
+    def _do_command(self, e, cmd, args):
+        c = self.connection
+        if cmd in self.commands.keys():
+            (m, f) = self.commands[cmd]
+            f(c, e, args)
+
     @staticmethod
     def _mod_import(name):
         mod = __import__(name)
@@ -123,7 +157,6 @@ class Sakari(irc.bot.SingleServerIRCBot):
         return mod
 
     def _register_commands(self, m):
-        #check if hooks are available
         dupe = [i for i in [n[0] for n in m.get_commands()] if i in self.commands.keys()]
         if dupe:
             return dupe
@@ -141,7 +174,6 @@ class Sakari(irc.bot.SingleServerIRCBot):
 
 if __name__ == "__main__":
     sakari = Sakari()
-
     try:
         sakari.start()
     except KeyboardInterrupt:
