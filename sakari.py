@@ -25,20 +25,12 @@ from modules.Module import Module
 from configparser import ConfigParser
 import threading
 
+from exceptions import SakariException
+
 try:
     from importlib import import_module
 except ImportError:
     import_module = __import__
-
-
-class SakariException(Exception):
-    def __init__(self, error, data=None):
-        self.error = error
-        self.data = data
-
-    def __str__(self):
-        return repr(self.error)
-
 
 class Sakari(irc.bot.SingleServerIRCBot):
     def __init__(self):
