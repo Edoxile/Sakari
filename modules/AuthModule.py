@@ -33,7 +33,11 @@ class AuthModule(Module):
             return auth.get_level(c, e)
         except SakariException as ex:
             c.privmsg(get_target(c, e), "Couldn't fetch auth level. Error: {}".format(ex.error))
-            return 0
+            return None
 
     def is_authorized(self, c, e, r):
-        return self.get_auth_level(c, e) >= r
+        level = self.get_auth_level(c, e)
+        if level is not None:
+            return level >= r
+        else:
+            return False

@@ -80,3 +80,4 @@ class Auth(Module):
                 del self.users[e.source.nick]
                 c.privmsg(get_target(c, e), "Your host changed after logging in. You have to log in again.")
                 return 0
+        return None
