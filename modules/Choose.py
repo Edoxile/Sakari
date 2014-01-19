@@ -36,6 +36,7 @@ class Choose(Module):
                 args[n] = int(current)
         except ValueError:
             c.privmsg(get_target(c,e), "\x02{}\x0f is no number!".format(current))
+            return
 
         if 0 < len(args) <= 2: 
             if len(args) == 1:
