@@ -30,10 +30,9 @@ class Choose(Module):
 
     def random(self, c, e, args):
         args = [int(n) for n in args]
-        if len(args) == 1:
-            val = random.randint(0, args[0])
-            c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
-        elif len(args) == 2:
+        if 0 < len(args) <= 2: 
+            if len(args) == 1:
+                args.append(0)
             if args[0] > args[1]:
                 (args[0], args[1]) = (args[1], args[0])
             val = random.randint(args[0], args[1])
