@@ -17,7 +17,6 @@ from modules.AuthModule import AuthModule, get_target
 from exceptions import SakariException
 from subprocess import check_output, CalledProcessError
 import itertools
-import threading
 
 __author__ = 'Edoxile, windwarrior'
 
@@ -52,7 +51,6 @@ class Manage(AuthModule):
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
             try:
-                print(threading.current_thread())
                 self.bot.load_module(m)
                 c.privmsg(get_target(c, e), "\x02{}\x0f loaded successfully!".format(m))
             except SakariException as ex:
