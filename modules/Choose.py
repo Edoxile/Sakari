@@ -50,6 +50,6 @@ class Choose(Module):
 
     def choose(self, c, e, args):
         if len(args) > 0:
-            c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(args.choice()))
+            c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(random.choice(args)))
         else:
             c.privmsg(get_target(c, e), "Usage: \x02choose\0xf [x..]")
