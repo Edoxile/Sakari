@@ -30,6 +30,10 @@ class Module:
     def get_commands(self):
         pass
 
+    @abstractmethod
+    def get_hooks(self):
+        pass
+
     def get_name(self):
         return self.__class__.__name__
 
