@@ -29,7 +29,7 @@ class Choose(Module):
         ]
 
     def get_hooks(self):
-        return None
+        return []
 
     def random(self, c, e, args):
         current = None

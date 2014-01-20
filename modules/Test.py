@@ -29,7 +29,7 @@ class Test(Module):
         ]
 
     def get_hooks(self):
-        return None
+        return []
 
     def test(self, c, e, args):
         c.privmsg(get_target(c, e), "Test called successfully! Args: {}".format(args))

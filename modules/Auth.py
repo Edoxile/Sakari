@@ -36,7 +36,7 @@ class Auth(Module):
         ]
 
     def get_hooks(self):
-        return None
+        return []
 
     def login(self, c, e, args):
         if e.source.nick in self.users.keys():

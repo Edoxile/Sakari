@@ -35,7 +35,7 @@ class Manage(AuthModule):
         ]
 
     def get_hooks(self):
-        return None
+        return []
 
     def die(self, c, e, args):
         if not self.is_authorized(c, e, 5):

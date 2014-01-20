@@ -67,13 +67,13 @@ class Sakari(irc.bot.SingleServerIRCBot):
         a = e.arguments[0].split(" ")
         if len(a[0]) > 1 and a[0][0] == '~':
             self._run_command(c, e, a[0][1:], a[1:])
-        self._run_hook(self.hooks['on_privmsg'], c, e)
+        self._run_hook('on_privmsg', c, e)
 
     def on_pubmsg(self, c, e):
         a = e.arguments[0].split(" ")
         if len(a[0]) > 1 and a[0][0] == '~':
             self._run_command(c, e, a[0][1:], a[1:])
-        self._run_hook(self.hooks['on_pubmsg'], c, e)
+        self._run_hook('on_pubmsg', c, e)
 
     def on_error(self, c, e):
         self._run_hook('on_error', c, e)
