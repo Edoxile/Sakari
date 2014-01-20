@@ -183,12 +183,16 @@ class Sakari(irc.bot.SingleServerIRCBot):
             del self.commands[c]
 
     def _register_hooks(self, m):
-        for (h, f) in m.get_hooks():
-            self.hooks[h].extend(f)
+        if m.get_hooks():
+            for (h, f) in m.get_hooks():
+                self.hooks[h].extend(f)
 
     def _remove_hooks(self, m, hks=None):
         if not hks:
-            hks = m.get_hooks()
+            if m.get_hooks():
+                hks = m.get_hooks()
+            else:
+                return
         for (h, f) in hks:
             self.hooks[h].remove(f)
 
