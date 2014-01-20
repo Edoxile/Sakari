@@ -46,7 +46,11 @@ class Sakari(irc.bot.SingleServerIRCBot):
         self.prefix = self.config.get("bot", "command_prefix")
         self.commands = dict()
         self.modules = dict()
-        self.hooks = dict()
+        self.hooks = {
+            'on_privmsg': [], 'on_pubmsg': [], 'on_error': [], 'on_join': [], 'on_kick': [], 'on_mode': [],
+            'on_part': [], 'on_privnotice': [], 'on_pubnotice': [], 'on_quit': [], 'on_invite': [], 'on_action': [],
+            'on_topic': [], 'on_nick': []
+        }
         for m in self.config.get("bot", "default_modules").split(","):
             try:
                 self.load_module(m)
@@ -62,48 +66,50 @@ class Sakari(irc.bot.SingleServerIRCBot):
     def on_privmsg(self, c, e):
         a = e.arguments[0].split(" ")
         if len(a[0]) > 1 and a[0][0] == '~':
-            self._do_command(e, a[0][1:], a[1:])
+            self._run_command(c, e, a[0][1:], a[1:])
+        self._run_hook(self.hooks['on_privmsg'], c, e)
 
     def on_pubmsg(self, c, e):
         a = e.arguments[0].split(" ")
         if len(a[0]) > 1 and a[0][0] == '~':
-            self._do_command(e, a[0][1:], a[1:])
+            self._run_command(c, e, a[0][1:], a[1:])
+        self._run_hook(self.hooks['on_pubmsg'], c, e)
 
     def on_error(self, c, e):
-        pass
+        self._run_hook('on_error', c, e)
 
     def on_join(self, c, e):
-        pass
+        self._run_hook('on_join', c, e)
 
     def on_kick(self, c, e):
-        pass
+        self._run_hook('on_kick', c, e)
 
     def on_mode(self, c, e):
-        pass
+        self._run_hook('on_mode', c, e)
 
     def on_part(self, c, e):
-        pass
+        self._run_hook('on_part', c, e)
 
     def on_privnotice(self, c, e):
-        pass
+        self._run_hook('on_privnotice', c, e)
 
     def on_pubbnotice(self, c, e):
-        pass
+        self._run_hook('on_pubnotice', c, e)
 
     def on_quit(self, c, e):
-        pass
+        self._run_hook('on_quit', c, e)
 
     def on_invite(self, c, e):
-        pass
+        self._run_hook('on_invite', c, e)
 
     def on_action(self, c, e):
-        pass
+        self._run_hook('on_action', c, e)
 
     def on_topic(self, c, e):
-        pass
+        self._run_hook('on_topic', c, e)
 
     def on_nick(self, c, e):
-        pass
+        self._run_hook('on_nick', c, e)
 
     def load_module(self, mn):
         if mn in self.modules.keys():
@@ -128,10 +134,12 @@ class Sakari(irc.bot.SingleServerIRCBot):
             else:
                 m.active = True
                 self.modules.update({mn: m})
+                self._register_hooks(m)
 
     def unload_module(self, mn):
         if mn in self.modules.keys():
             self._remove_commands(self.modules[mn])
+            self._remove_hooks(self.modules[mn])
             self.modules[mn].active = False
         else:
             raise SakariException("Module {} is not yet loaded!".format(mn))
@@ -142,8 +150,11 @@ class Sakari(irc.bot.SingleServerIRCBot):
         else:
             raise SakariException("Module {} not loaded!".format(mn))
 
-    def _do_command(self, e, cmd, args):
-        c = self.connection
+    def _run_hook(self, hook, c, e):
+        for f in self.hooks[hook]:
+            f(c, e, e.arguments[0])
+
+    def _run_command(self, c, e, cmd, args):
         if cmd in self.commands.keys():
             (m, f) = self.commands[cmd]
             f(c, e, args)
@@ -165,11 +176,21 @@ class Sakari(irc.bot.SingleServerIRCBot):
                 self.commands.update({c: (m, f)})
             return []
 
-    def _remove_commands(self, m, hooks=None):
-        if not hooks:
-            hooks = m.get_commands()
-        for (c, f) in hooks:
+    def _remove_commands(self, m, cmds=None):
+        if not cmds:
+            cmds = m.get_commands()
+        for (c, f) in cmds:
             del self.commands[c]
+
+    def _register_hooks(self, m):
+        for (h, f) in m.get_hooks():
+            self.hooks[h].extend(f)
+
+    def _remove_hooks(self, m, hks=None):
+        if not hks:
+            hks = m.get_hooks()
+        for (h, f) in hks:
+            self.hooks[h].remove(f)
 
 
 if __name__ == "__main__":

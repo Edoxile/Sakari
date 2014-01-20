@@ -35,6 +35,9 @@ class Auth(Module):
             ('whois', self.whois)
         ]
 
+    def get_hooks(self):
+        return None
+
     def login(self, c, e, args):
         if e.source.nick in self.users.keys():
             c.privmsg(get_target(c, e), "Already logged in as %s." % self.users[e.source.nick][1])

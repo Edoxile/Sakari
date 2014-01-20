@@ -19,6 +19,7 @@ __author__ = 'Edoxile'
 
 
 class Test(Module):
+
     def get_commands(self):
         return [
             ('test', self.test),
@@ -26,6 +27,9 @@ class Test(Module):
             ('raw', self.raw),
             ('blub', self.blub)
         ]
+
+    def get_hooks(self):
+        return None
 
     def test(self, c, e, args):
         c.privmsg(get_target(c, e), "Test called successfully! Args: {}".format(args))

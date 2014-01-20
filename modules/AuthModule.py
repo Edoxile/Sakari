@@ -25,7 +25,11 @@ class AuthModule(Module):
 
     @abstractmethod
     def get_commands(self):
-        super().get_commands()
+        pass
+
+    @abstractmethod
+    def get_hooks(self):
+        pass
 
     def get_auth_level(self, c, e):
         try:

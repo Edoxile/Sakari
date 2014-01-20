@@ -34,6 +34,9 @@ class Manage(AuthModule):
             ('update', self.update)
         ]
 
+    def get_hooks(self):
+        return None
+
     def die(self, c, e, args):
         if not self.is_authorized(c, e, 5):
             c.privmsg(get_target(c, e), "You don't have permission to reload modules!")

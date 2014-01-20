@@ -28,6 +28,9 @@ class Choose(Module):
             ('choose', self.choose)
         ]
 
+    def get_hooks(self):
+        return None
+
     def random(self, c, e, args):
         current = None
         try:
