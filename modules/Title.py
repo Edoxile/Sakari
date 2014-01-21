@@ -32,7 +32,7 @@ class Title(Module):
 
     def get_hooks(self):
         return [
-            ('privmsg', self.get_title)
+            ('privmsg', [self.get_title])
         ]
 
     def get_title(self, c, e, msg):
