@@ -33,12 +33,12 @@ class Calculate(Module):
     def simplify(self, c, e, args):
         try:
             c.privmsg(get_target(c, e), "{}: {}".format(e.source.nick, simplify(" ".join(args))))
-        except SyntaxError:
+        except:
             c.privmsg(get_target(c, e), "Syntax error; did you mean 'solve'?")
 
 
     def solve(self, c, e, args):
         try:
             c.privmsg(get_target(c, e), "{}: {}".format(e.source.nick, solve(" ".join(args))))
-        except SyntaxError:
+        except:
             c.privmsg(get_target(c, e), "Syntax error, please try again.")
