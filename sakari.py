@@ -65,7 +65,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
 
     def on_privmsg(self, c, e):
         a = e.arguments[0].split(" ")
-        if len(a[0]) > 1 and a[0][0] == '~':
+        if len(a[0]) > 1 and a[0][0] == self.prefix:
             self._run_command(c, e, a[0][1:], a[1:])
         self._run_hook('privmsg', c, e)
 

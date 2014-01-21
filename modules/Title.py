@@ -32,7 +32,7 @@ class Title(Module):
 
     def get_hooks(self):
         return [
-            ('privmsg', [self.get_title])
+            ('pubmsg', [self.get_title])
         ]
 
     def get_title(self, c, e, msg):
@@ -42,7 +42,7 @@ class Title(Module):
             data = url.read(1024)
             info = magic.from_buffer(data).decode('utf-8')
             if 'HTML document' in info:
-                t = self.re_html.search(data)
+                t = self.re_html.search(data.decode('utf-8'))
                 if t:
                     c.privmsg(get_target(c, e), "[ {} ]".format(t.group(1)))
             else:
