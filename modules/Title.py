@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from urllib.error import HTTPError
 from modules.Module import Module, get_target
 import re
 from urllib import request
@@ -38,7 +39,11 @@ class Title(Module):
     def get_title(self, c, e, msg):
         m = self.re_title.search(msg)
         if m:
-            url = request.urlopen(m.group(1))
+            try:
+                url = request.urlopen(m.group(1))
+            except HTTPError as ex:
+                c.privmsg(get_target(c, e), "Error: {} {}".format(ex.code, ex.reason))
+                return
             data = url.read(1024)
             info = magic.from_buffer(data).decode('utf-8')
             if 'HTML document' in info:
