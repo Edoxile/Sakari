@@ -47,9 +47,9 @@ class Sakari(irc.bot.SingleServerIRCBot):
         self.commands = dict()
         self.modules = dict()
         self.hooks = {
-            'on_privmsg': [], 'on_pubmsg': [], 'on_error': [], 'on_join': [], 'on_kick': [], 'on_mode': [],
-            'on_part': [], 'on_privnotice': [], 'on_pubnotice': [], 'on_quit': [], 'on_invite': [], 'on_action': [],
-            'on_topic': [], 'on_nick': []
+            'privmsg': [], 'pubmsg': [], 'error': [], 'join': [], 'kick': [], 'mode': [],
+            'part': [], 'privnotice': [], 'pubnotice': [], 'quit': [], 'invite': [], 'action': [],
+            'topic': [], 'nick': []
         }
         for m in self.config.get("bot", "default_modules").split(","):
             try:
@@ -67,49 +67,49 @@ class Sakari(irc.bot.SingleServerIRCBot):
         a = e.arguments[0].split(" ")
         if len(a[0]) > 1 and a[0][0] == '~':
             self._run_command(c, e, a[0][1:], a[1:])
-        self._run_hook('on_privmsg', c, e)
+        self._run_hook('privmsg', c, e)
 
     def on_pubmsg(self, c, e):
         a = e.arguments[0].split(" ")
         if len(a[0]) > 1 and a[0][0] == '~':
             self._run_command(c, e, a[0][1:], a[1:])
-        self._run_hook('on_pubmsg', c, e)
+        self._run_hook('pubmsg', c, e)
 
     def on_error(self, c, e):
-        self._run_hook('on_error', c, e)
+        self._run_hook('error', c, e)
 
     def on_join(self, c, e):
-        self._run_hook('on_join', c, e)
+        self._run_hook('join', c, e)
 
     def on_kick(self, c, e):
-        self._run_hook('on_kick', c, e)
+        self._run_hook('kick', c, e)
 
     def on_mode(self, c, e):
-        self._run_hook('on_mode', c, e)
+        self._run_hook('mode', c, e)
 
     def on_part(self, c, e):
-        self._run_hook('on_part', c, e)
+        self._run_hook('part', c, e)
 
     def on_privnotice(self, c, e):
-        self._run_hook('on_privnotice', c, e)
+        self._run_hook('privnotice', c, e)
 
     def on_pubbnotice(self, c, e):
-        self._run_hook('on_pubnotice', c, e)
+        self._run_hook('pubnotice', c, e)
 
     def on_quit(self, c, e):
-        self._run_hook('on_quit', c, e)
+        self._run_hook('quit', c, e)
 
     def on_invite(self, c, e):
-        self._run_hook('on_invite', c, e)
+        self._run_hook('invite', c, e)
 
     def on_action(self, c, e):
-        self._run_hook('on_action', c, e)
+        self._run_hook('action', c, e)
 
     def on_topic(self, c, e):
-        self._run_hook('on_topic', c, e)
+        self._run_hook('topic', c, e)
 
     def on_nick(self, c, e):
-        self._run_hook('on_nick', c, e)
+        self._run_hook('nick', c, e)
 
     def load_module(self, mn):
         if mn in self.modules.keys():
