@@ -194,7 +194,8 @@ class Sakari(irc.bot.SingleServerIRCBot):
             else:
                 return
         for (h, f) in hks:
-            self.hooks[h].remove(f)
+            for ff in f:
+                self.hooks[h].remove(ff)
 
 
 if __name__ == "__main__":
