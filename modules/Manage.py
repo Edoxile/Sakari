@@ -52,7 +52,7 @@ class Manage(AuthModule):
             try:
                 self.bot.unload_module(m)
                 self.bot.load_module(m)
-                c.privmsg(get_target(c, e), "\x02{}\x0f reloaded successfully!".format(m))
+                c.privmsg(get_target(c, e), '\x02{}\x0f reloaded successfully!'.format(m))
             except SakariException as ex:
                 c.privmsg(get_target(c, e), "Couldn't reload \x02{}\x0f: %s".format(m, ex.error))
 
@@ -64,7 +64,7 @@ class Manage(AuthModule):
         for m in modules:
             try:
                 self.bot.load_module(m)
-                c.privmsg(get_target(c, e), "\x02{}\x0f loaded successfully!".format(m))
+                c.privmsg(get_target(c, e), '\x02{}\x0f loaded successfully!'.format(m))
             except SakariException as ex:
                 c.privmsg(get_target(c, e), "Couldn't load \x02{}\x0f: {}".format(m, ex.error))
 
@@ -76,18 +76,18 @@ class Manage(AuthModule):
         for m in modules:
             try:
                 self.bot.unload_module(m)
-                c.privmsg(get_target(c, e), "\x02{}\x0f unloaded successfully!".format(m))
+                c.privmsg(get_target(c, e), '\x02{}\x0f unloaded successfully!'.format(m))
             except SakariException as ex:
                 c.privmsg(get_target(c, e), "Couldn't unload \x02{}\x0f: {}".format(m, ex.error))
 
     def join(self, c, e, args):
-        print("Joining channels {}.".format(args[0].split(',')))
+        print('Joining channels {}.'.format(args[0].split(',')))
         for ch in args[0].split(','):
             c.join(ch)
 
     def part(self, c, e, args):
         if len(args) > 0:
-            print("Parting channels {}.".format(args[0].split(',')))
+            print('Parting channels {}.'.format(args[0].split(',')))
             for ch in args[0].split(','):
                 c.part(ch, ' '.join(args[1:]))
         else:
@@ -96,11 +96,11 @@ class Manage(AuthModule):
     def list(self, c, e, args):
         if len(args) and args[0] == 'modules':
             ms = self.bot.modules.values()
-            response = "\x02Active:\x0f " + ", ".join(x.get_name() for x in ms if x.active)
-            response += ". \x02Inactive:\x0f " + ", ".join(x.get_name() for x in ms if not x.active)
+            response = '\x02Active:\x0f ' + ', '.join(x.get_name() for x in ms if x.active)
+            response += '. \x02Inactive:\x0f ' + ', '.join(x.get_name() for x in ms if not x.active)
             c.privmsg(get_target(c, e), response)
         elif len(args) and args[0] == 'channels':
-            c.privmsg(get_target(c, e), "\x02Channels:\x0f " + ', '.join(self.bot.channels.keys()) + '.')
+            c.privmsg(get_target(c, e), '\x02Channels:\x0f ' + ', '.join(self.bot.channels.keys()) + '.')
 
     def update(self, c, e, args):
         if not self.is_authorized(c, e, 5):

@@ -36,25 +36,35 @@ class Watch(Module):
 
     def get_commands(self):
         return [
-            ('watch', self.watch)
+            ('watch', self.watch),
+            ('watchlist', self.watchlist)
         ]
 
     def get_hooks(self):
-        return []
+        return [
+            ('privmsg', [self.event]),
+            ('pubmsg', [self.event])
+        ]
 
     def watch(self, c, e, args):
         msg = "Setup watches for: "
         if len(args) > 0:
             cursor = self.sqlite.cursor()
             for watch in args:
-                cursor.execute("SELECT id FROM watches WHERE watch=? AND watcher=?", (watch, get_target(c, e)))
+                cursor.execute('SELECT id FROM watches WHERE watch=? AND watcher=?', (watch, get_target(c, e)))
                 if cursor.rowcount == 0:
-                    cursor.execute("INSERT INTO watches (watch, watcher) VALUES (?,?)", (watch, get_target(c, e)))
+                    cursor.execute('INSERT INTO watches (watch, watcher) VALUES (?,?)', (watch, get_target(c, e)))
                     msg += "{}, ".format(watch)
 
             cursor.close()
             c.privmsg(get_target(c, e), msg)
         else:
-            c.privmsg(get_target(c, e), "you need to give me names")
+            c.privmsg(get_target(c, e), '{}: you need to give me names of people to watch!'.format(e.source.nick))
 
+    def watchlist(self, c, e, args):
+        #Print a list of people you are watching
+        pass
 
+    def event(self, c, e, msg):
+        #Check if event originates from a watch, notify watchers, remove from db
+        pass

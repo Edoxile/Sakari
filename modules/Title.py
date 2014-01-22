@@ -25,8 +25,8 @@ __author__ = 'Edoxile'
 class Title(Module):
     def __init__(self, b):
         super().__init__(b)
-        self.re_title = re.compile("((?:https?://|www\.)[-~=\\\/a-zA-Z0-9\.:_\?&%,#\+]+)")
-        self.re_html = re.compile("<title>(.+?)</title>")
+        self.re_title = re.compile('((?:https?://|www\.)[-~=\\\/a-zA-Z0-9\.:_\?&%,#\+]+)')
+        self.re_html = re.compile('<title>(.+?)</title>')
 
     def get_commands(self):
         return []
@@ -42,13 +42,13 @@ class Title(Module):
             try:
                 url = request.urlopen(m.group(1))
             except HTTPError as ex:
-                c.privmsg(get_target(c, e), "Error: {} {}".format(ex.code, ex.reason))
+                c.privmsg(get_target(c, e), 'Error: {} {}'.format(ex.code, ex.reason))
                 return
             data = url.read(1024)
             info = magic.from_buffer(data).decode('utf-8')
             if 'HTML document' in info:
                 t = self.re_html.search(data.decode('utf-8'))
                 if t:
-                    c.privmsg(get_target(c, e), "[ {} ]".format(t.group(1)))
+                    c.privmsg(get_target(c, e), '[ {} ]'.format(t.group(1)))
             else:
-                c.privmsg(get_target(c, e), "[ {} ]".format(info))
+                c.privmsg(get_target(c, e), '[ {} ]'.format(info))

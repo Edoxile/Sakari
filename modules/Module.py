@@ -23,7 +23,7 @@ class Module:
 
     def __init__(self, b):
         self.bot = b
-        print("Module " + self.get_name() + " loaded successfully!")
+        print('Module ' + self.get_name() + ' loaded successfully!')
         self.active = False
 
     @abstractmethod

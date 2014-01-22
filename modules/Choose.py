@@ -32,13 +32,12 @@ class Choose(Module):
         return []
 
     def random(self, c, e, args):
-        current = None
         try:
             for i in range(len(args)):
                 current = args[i]
                 args[i] = int(current)
         except ValueError as e:
-            c.privmsg(get_target(c,e), "")
+            c.privmsg(get_target(c, e), "")
 
         if len(args) == 1:
             val = random.randint(0, args[0])
@@ -46,11 +45,11 @@ class Choose(Module):
             if args[0] > args[1]:
                 (args[0], args[1]) = (args[1], args[0])
             val = random.randint(args[0], args[1])
-        c.privmsg(get_target(c, e), "I choose \x02{}\x0f!".format(val))
+        c.privmsg(get_target(c, e), 'I choose \x02{}\x0f!'.format(val))
 
     def choose(self, c, e, args):
         if not len(args) > 0:
-            c.privmsg(get_target(c,e), "I need arguments to choose from")
+            c.privmsg(get_target(c, e), 'I need arguments to choose from!')
         else:
             ch = random.choice(args)
-            c.privmsg(get_target(c,e), "I choose \x02{}\x0f".format(ch))
+            c.privmsg(get_target(c, e), 'I choose \x02{}\x0f!'.format(ch))

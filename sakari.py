@@ -39,11 +39,11 @@ class Sakari(irc.bot.SingleServerIRCBot):
 
         factory = irc.connection.Factory(wrapper=ssl.wrap_socket)
         irc.bot.SingleServerIRCBot.__init__(
-            self, [(self.config.get("server", "host"), int(self.config.get("server", "port")))],
-            self.config.get("server", "username"), self.config.get("server", "realname"), 60, connect_factory=factory
+            self, [(self.config.get('server', 'host'), int(self.config.get('server', 'port')))],
+            self.config.get('server', 'username'), self.config.get('server', 'realname'), 60, connect_factory=factory
         )
-        self.channel = self.config.get("server", "channel")
-        self.prefix = self.config.get("bot", "command_prefix")
+        self.channel = self.config.get('server', 'channel')
+        self.prefix = self.config.get('bot', 'command_prefix')
         self.commands = dict()
         self.modules = dict()
         self.hooks = {
@@ -51,27 +51,27 @@ class Sakari(irc.bot.SingleServerIRCBot):
             'part': [], 'privnotice': [], 'pubnotice': [], 'quit': [], 'invite': [], 'action': [],
             'topic': [], 'nick': []
         }
-        for m in self.config.get("bot", "default_modules").split(","):
+        for m in self.config.get('bot', 'default_modules').split(','):
             try:
                 self.load_module(m)
             except SakariException as ex:
                 print(ex.error)
 
     def on_nicknameinuse(self, c, e):
-        c.nick(c.get_nickname() + "_")
+        c.nick(c.get_nickname() + '_')
 
     def on_welcome(self, c, e):
         c.join(self.channel)
 
     def on_privmsg(self, c, e):
-        a = e.arguments[0].split(" ")
+        a = e.arguments[0].split(' ')
         if len(a[0]) > 1 and a[0][0] == self.prefix:
             self._run_command(c, e, a[0][1:], a[1:])
         self._run_hook('privmsg', c, e)
 
     def on_pubmsg(self, c, e):
-        a = e.arguments[0].split(" ")
-        if len(a[0]) > 1 and a[0][0] == '~':
+        a = e.arguments[0].split(' ')
+        if len(a[0]) > 1 and a[0][0] == self.prefix:
             self._run_command(c, e, a[0][1:], a[1:])
         self._run_hook('pubmsg', c, e)
 
@@ -116,20 +116,20 @@ class Sakari(irc.bot.SingleServerIRCBot):
             if not self.modules[mn].active:
                 mod = reload(sys.modules[self.modules[mn].__module__])
             else:
-                raise SakariException("Module {} already loaded!".format(mn))
+                raise SakariException('Module {} already loaded!'.format(mn))
         else:
             try:
                 mod = import_module('modules.' + mn)
             except ImportError:
-                raise SakariException("Tried importing a module that does not exist {}".format(mn))
+                raise SakariException('Tried importing a module that does not exist {}'.format(mn))
         clazz = getattr(mod, mn)
         m = clazz(self)
         if not isinstance(m, Module):
-            raise SakariException("Object given to load_module, but object is not an instance of Module")
+            raise SakariException('Object given to load_module, but object is not an instance of Module')
         else:
             dupe = self._register_commands(m)
             if dupe:
-                raise SakariException("Duplicate command list found when loading module {}. Commands: {}".format(
+                raise SakariException('Duplicate command list found when loading module {}. Commands: {}'.format(
                     m.get_name(), dupe))
             else:
                 m.active = True
@@ -142,13 +142,13 @@ class Sakari(irc.bot.SingleServerIRCBot):
             self._remove_hooks(self.modules[mn])
             self.modules[mn].active = False
         else:
-            raise SakariException("Module {} is not yet loaded!".format(mn))
+            raise SakariException('Module {} is not yet loaded!'.format(mn))
 
     def get_module(self, mn):
         if mn in self.modules.keys():
             return self.modules[mn]
         else:
-            raise SakariException("Module {} not loaded!".format(mn))
+            raise SakariException('Module {} not loaded!'.format(mn))
 
     def _run_hook(self, hook, c, e):
         for f in self.hooks[hook]:
@@ -201,9 +201,9 @@ class Sakari(irc.bot.SingleServerIRCBot):
                     pass
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     sakari = Sakari()
     try:
         sakari.start()
     except KeyboardInterrupt:
-        sakari.die("Killed by Ctrl+C")
+        sakari.die('Killed by Ctrl+C')

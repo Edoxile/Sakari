@@ -1,1 +1,1 @@
-__author__ = 'edoxile'
+__author__ = 'Edoxile, windwarrior'
