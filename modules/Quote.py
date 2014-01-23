@@ -48,11 +48,11 @@ class Quote(Module):
                     c.privmsg(get_target(c, e), msg)
         else:
             if get_target(c, e) in self.buffer.keys():
-                self.buffer[get_target(c, e)] = [e.source.nick, msg] + self.buffer[get_target(c, e)]
+                self.buffer[get_target(c, e)] = [(e.source.nick, msg)] + self.buffer[get_target(c, e)]
                 if len(self.buffer[get_target(c, e)]) > 100:
                     self.buffer[get_target(c, e)] = self.buffer[get_target(c, e)][:100]
             else:
-                self.buffer.update({get_target(c, e): [[e.source.nick, msg]]})
+                self.buffer.update({get_target(c, e): [(e.source.nick, msg)]})
 
     def quote(self, ch, m):
         if ch not in self.buffer.keys():
