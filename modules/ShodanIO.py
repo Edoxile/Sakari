@@ -44,5 +44,7 @@ class ShodanIO(Module):
     def host(self, c, e, args):
         result = self.shodan.host(args[0])
         if result:
-            c.privmsg(get_target(c, e), 'Available ports: {' + ', '.join([n['port'] for n in result['data']]) + '}.')
+            print('{}'.format(result))
+            c.privmsg(get_target(c, e),
+                      'Available ports: {' + ', '.join([str(n['port']) for n in result['data']]) + '}.')
             c.privmsg(get_target(c, e), 'Services: {' + ', '.join([n['data'] for n in result['data']]) + '}.')
