@@ -120,8 +120,8 @@ class Sakari(irc.bot.SingleServerIRCBot):
         else:
             try:
                 mod = import_module('modules.' + mn)
-            except ImportError:
-                raise SakariException('Tried importing a module that does not exist {}'.format(mn))
+            except ImportError as ie:
+                raise SakariException('Tried importing a module but it failed: {}'.format(ie.msg))
         clazz = getattr(mod, mn)
         m = clazz(self)
         if not isinstance(m, Module):
