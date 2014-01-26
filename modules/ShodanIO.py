@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from exceptions import SakariException
 from modules.Module import Module, get_target
-from shodan import Shodan
+from shodan import Shodan, APIError
 
 __author__ = 'Edoxile'
 
@@ -38,11 +38,17 @@ class ShodanIO(Module):
         return []
 
     def query(self, c, e, args):
-        result = self.shodan.search(' '.join(args))
-        c.privmsg(get_target(c, e), 'Found {} results.'.format(result['total']))
+        try:
+            result = self.shodan.search(' '.join(args))
+            c.privmsg(get_target(c, e), 'Found {} results.'.format(result['total']))
+        except APIError as er:
+            c.privmsg(get_target(c, e), '\x02Error:\x0f {}'.format(er.value))
 
     def host(self, c, e, args):
-        result = self.shodan.host(args[0])
-        if result:
-            c.privmsg(get_target(c, e),
-                      'Available ports: {' + ', '.join([str(n['port']) for n in result['data']]) + '}.')
+        try:
+            result = self.shodan.host(args[0])
+            if result:
+                c.privmsg(get_target(c, e),
+                          'Available ports: {' + ', '.join([str(n['port']) for n in result['data']]) + '}.')
+        except APIError as er:
+            c.privmsg(get_target(c, e), '\x02Error:\x0f {}'.format(er.value))
