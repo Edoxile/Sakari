@@ -47,4 +47,5 @@ class ShodanIO(Module):
             print('{}'.format(result))
             c.privmsg(get_target(c, e),
                       'Available ports: {' + ', '.join([str(n['port']) for n in result['data']]) + '}.')
-            c.privmsg(get_target(c, e), 'Services: {' + ', '.join([n['data'] for n in result['data']]) + '}.')
+            c.privmsg(get_target(c, e),
+                      'Services: {' + ', '.join([n['data'].replace('\n', ' ') for n in result['data']]) + '}.')
