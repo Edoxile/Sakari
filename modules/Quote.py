@@ -61,11 +61,10 @@ class Quote(Module):
             qre = re.compile(m.group(2), flags=re.IGNORECASE)
         else:
             qre = re.compile(m.group(2))
-        for buffer in self.buffer[ch]:
-            for (n, msg) in buffer:
-                q = qre.search(msg)
-                if q:
-                    return q.group(0)
+        for (n, msg) in self.buffer[ch]:
+            q = qre.search(msg)
+            if q:
+                return "<{}> {}".format(n, msg)
         return None
 
     def subs(self, ch, m):
@@ -75,13 +74,12 @@ class Quote(Module):
             sre = re.compile(m.group(2), flags=re.IGNORECASE)
         else:
             sre = re.compile(m.group(2))
-        for buffer in self.buffer[ch]:
-            for (n, msg) in buffer:
-                s = sre.search(msg)
-                if s and m.group(4) is not None and not 'g' in m.group(4):
-                    return sre.sub(m.group(0), m.group(3), 1)
-                elif s:
-                    return sre.sub(m.group(0), m.group(3))
+        for (n, msg) in self.buffer[ch]:
+            s = sre.search(msg)
+            if s and m.group(4) is not None and not 'g' in m.group(4):
+                return "<{}> {}".format(n, sre.sub(m.group(3), msg, 1))
+            elif s:
+                return "<{}> {}".format(n, sre.sub(m.group(3), msg))
         return None
 
     def subswitch(self, ch, m):
