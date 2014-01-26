@@ -40,7 +40,7 @@ class Google(Module):
         results = simplejson.loads(raw.read())['responseData']['results']
         if len(results) > 0:
             c.privmsg(get_target(c, e), '\x02{}\x0f - {}'.format(
-                results[0]['title'], results[0]['url']
+                results[0]['titleNoFormatting'], results[0]['url']
             ))
         else:
             c.privmsg(get_target(c, e),
