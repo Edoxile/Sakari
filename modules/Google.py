@@ -24,14 +24,15 @@ class Google(Module):
     def __init__(self, b):
         super().__init__(b)
         self._base_url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&{}'
+        self._img_url = 'http://ajax.googleapis.com/ajax/services/search/images?v=1.0&{}'
 
     def get_hooks(self):
         return []
 
     def get_commands(self):
         return [
-            ('google', self.search),
-            ('g', self.search)
+            ('g', self.search),
+            ('gi', self.images)
         ]
 
     def search(self, c, e, args):
@@ -45,4 +46,17 @@ class Google(Module):
         else:
             c.privmsg(get_target(c, e),
                       'Sorry {}, couldn\'nt find anything for \'{}\' on Google.'.format(e.source.nick, ' '.join(args)))
+        pass
+
+    def images(self, c, e, args):
+        url = self._img_url.format(parse.urlencode({'q': ' '.join(args)}))
+        raw = request.urlopen(url)
+        results = simplejson.loads(raw.read())['responseData']['results']
+        if len(results) > 0:
+            c.privmsg(get_target(c, e), '\x02{}\x0f - {}'.format(
+                results[0]['titleNoFormatting'], results[0]['url']
+            ))
+        else:
+            c.privmsg(get_target(c, e),
+                      'Sorry {}, couldn\'nt find anything for \'{}\' on Google Images.'.format(e.source.nick, ' '.join(args)))
         pass
