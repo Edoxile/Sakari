@@ -15,17 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import random
 from modules.Module import Module, get_target
+import random
+import string
+from urllib import request
 
 __author__ = 'windwarrior, Edoxile'
 
 
-class Choose(Module):
+class Random(Module):
     def get_commands(self):
         return [
             ('random', self.random),
-            ('choose', self.choose)
+            ('choose', self.choose),
+            ('ri', self.imgur)
         ]
 
     def get_hooks(self):
@@ -53,3 +56,11 @@ class Choose(Module):
         else:
             ch = random.choice(args)
             c.privmsg(get_target(c, e), 'I choose \x02{}\x0f!'.format(ch))
+
+    def imgur(self, c, e, args):
+        while True:
+            url = 'http://i.imgur.com/' + ''.join(random.sample(string.ascii_letters + string.digits, 5)) + '.png'
+            r = request.urlopen(url)
+            if r.geturl() != 'http://i.imgur.com/removed.png':
+                c.privmsg(get_target(c, e), 'Random Imgur (might be NSFW!): {}'.format(url))
+                break
