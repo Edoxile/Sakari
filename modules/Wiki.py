@@ -38,18 +38,18 @@ class Wiki(Module):
         wikipedia.set_lang(args[0])
         p = wikipedia.page(' '.join(args[1:]))
         if p:
-            c.privmsg(get_target(c, e), '\x02{}\x0f - {}'.format(p.url, smart_truncate(p.summary)))
+            c.privmsg(get_target(c, e), '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary), p.url))
         wikipedia.set_lang(self.bot.config.get('wikipedia', 'lang'))
 
     def search(self, c, e, args):
         p = wikipedia.page(' '.join(args))
         if p:
-            c.privmsg(get_target(c, e), '\x02{}\x0f - {}'.format(p.url, smart_truncate(p.summary)))
+            c.privmsg(get_target(c, e), '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary), p.url))
 
     def random(self, c, e, args):
-        p = wikipedia.random()
+        p = wikipedia.page(wikipedia.random())
         if p:
-            c.privmsg(get_target(c, e), '\x02{}\x0f - {}'.format(p[0].url, smart_truncate(p[0].summary)))
+            c.privmsg(get_target(c, e), '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary), p.url))
 
 
 def smart_truncate(content, length=200, suffix='...'):
