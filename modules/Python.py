@@ -30,5 +30,10 @@ class Python(Module):
 
     def run(self, c, e, args):
         cmd = ' '.join(args).split(';')[0]
-        c.privmsg(get_target(c, e),
-                  subprocess.check_output(['python', '-c', 'print({})'.format(cmd)]).decode('utf-8').replace('\n', ''))
+        try:
+            c.privmsg(get_target(c, e),
+                      subprocess.check_output(['python', '-c', 'print({})'.format(cmd)]).decode('utf-8').replace('\n',
+                                                                                                                 ''))
+        except subprocess.CalledProcessError as ex:
+            c.privmsg(get_target(c, e),
+                      'Exception running python code: {}'.format(ex.output.encode('utf-8').replace('\n', ' ')))
