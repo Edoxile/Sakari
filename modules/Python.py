@@ -30,4 +30,5 @@ class Python(Module):
 
     def run(self, c, e, args):
         cmd = ' '.join(args).split(';')[0]
-        c.privmsg(get_target(c, e), subprocess.check_output(['python', '-c', 'print({})'.format(cmd)]).decode('utf-8'))
+        c.privmsg(get_target(c, e),
+                  subprocess.check_output(['python', '-c', 'print({})'.format(cmd)]).decode('utf-8').replace('\n', ''))
