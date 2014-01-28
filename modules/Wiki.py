@@ -15,6 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from modules.Module import Module, get_target
 import wikipedia
+from wikipedia.exceptions import DisambiguationError
 
 __author__ = 'Edoxile'
 
@@ -47,9 +48,14 @@ class Wiki(Module):
             c.privmsg(get_target(c, e), '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary), p.url))
 
     def random(self, c, e, args):
-        p = wikipedia.page(wikipedia.random())
-        if p:
-            c.privmsg(get_target(c, e), '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary), p.url))
+        while True:
+            try:
+                p = wikipedia.page(wikipedia.random())
+                if p:
+                    c.privmsg(get_target(c, e), '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary), p.url))
+                    break
+            except DisambiguationError:
+                pass
 
 
 def smart_truncate(content, length=200, suffix='...'):
