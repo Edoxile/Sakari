@@ -40,14 +40,14 @@ class Wiki(Module):
         p = wikipedia.page(' '.join(args[1:]))
         if p:
             c.privmsg(get_target(c, e),
-                      '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary.replace('\n', '')), p.url))
+                      '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary.replace('\n', ' ')), p.url))
         wikipedia.set_lang(self.bot.config.get('wikipedia', 'lang'))
 
     def search(self, c, e, args):
         p = wikipedia.page(' '.join(args))
         if p:
             c.privmsg(get_target(c, e),
-                      '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary.replace('\n', '')), p.url))
+                      '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary.replace('\n', ' ')), p.url))
 
     def random(self, c, e, args):
         while True:
@@ -55,7 +55,7 @@ class Wiki(Module):
                 p = wikipedia.page(wikipedia.random())
                 if p:
                     c.privmsg(get_target(c, e),
-                              '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary.replace('\n', '')),
+                              '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary.replace('\n', ' ')),
                                                               p.url))
                     break
             except DisambiguationError:
