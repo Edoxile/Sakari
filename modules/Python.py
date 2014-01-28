@@ -36,4 +36,4 @@ class Python(Module):
                                                                                                                  ''))
         except subprocess.CalledProcessError as ex:
             c.privmsg(get_target(c, e),
-                      'Exception running python code: {}'.format(ex.output.encode('utf-8').replace('\n', ' ')))
+                      'Exception running python code: {}'.format(ex.output.decode('utf-8').replace('\n', ' ')))
