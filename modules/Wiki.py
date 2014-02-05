@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from modules.Module import Module, get_target
+from modules.Module import Module, get_target, Command
 import wikipedia
 from wikipedia.exceptions import DisambiguationError
 
@@ -25,16 +25,7 @@ class Wiki(Module):
         super().__init__(b)
         wikipedia.set_lang(self.bot.config.get('wikipedia', 'lang'))
 
-    def get_commands(self):
-        return [
-            ('w', self.search),
-            ('rw', self.random),
-            ('wl', self.search_lang)
-        ]
-
-    def get_hooks(self):
-        return []
-
+    @Command('wl', 'wikil', 'wlang', 'wikilang')
     def search_lang(self, c, e, args):
         wikipedia.set_lang(args[0])
         p = wikipedia.page(' '.join(args[1:]))
@@ -43,12 +34,14 @@ class Wiki(Module):
                       '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary.replace('\n', ' ')), p.url))
         wikipedia.set_lang(self.bot.config.get('wikipedia', 'lang'))
 
+    @Command('w', 'wiki')
     def search(self, c, e, args):
         p = wikipedia.page(' '.join(args))
         if p:
             c.privmsg(get_target(c, e),
                       '\x02{}\x0f - {} [ {} ]'.format(p.title, smart_truncate(p.summary.replace('\n', ' ')), p.url))
 
+    @Command('rw', 'randomw', 'randomwiki', 'rwiki')
     def random(self, c, e, args):
         while True:
             try:

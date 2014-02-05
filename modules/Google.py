@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from modules.Module import Module, get_target
+from modules.Module import Module, get_target, Command
 import simplejson
 from urllib import request, parse
 
@@ -26,15 +26,7 @@ class Google(Module):
         self._base_url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&{}'
         self._img_url = 'http://ajax.googleapis.com/ajax/services/search/images?v=1.0&{}'
 
-    def get_hooks(self):
-        return []
-
-    def get_commands(self):
-        return [
-            ('g', self.search),
-            ('gi', self.images)
-        ]
-
+    @Command('g', 'google')
     def search(self, c, e, args):
         url = self._base_url.format(parse.urlencode({'q': ' '.join(args)}))
         raw = request.urlopen(url)
@@ -48,6 +40,7 @@ class Google(Module):
                       'Sorry {}, couldn\'nt find anything for \'{}\' on Google.'.format(e.source.nick, ' '.join(args)))
         pass
 
+    @Command('gi', 'googlei', 'googleimages', 'gimages')
     def images(self, c, e, args):
         url = self._img_url.format(parse.urlencode({'q': ' '.join(args)}))
         raw = request.urlopen(url)
@@ -58,5 +51,6 @@ class Google(Module):
             ))
         else:
             c.privmsg(get_target(c, e),
-                      'Sorry {}, couldn\'nt find anything for \'{}\' on Google Images.'.format(e.source.nick, ' '.join(args)))
+                      'Sorry {}, couldn\'nt find anything for \'{}\' on Google Images.'.format(e.source.nick,
+                                                                                               ' '.join(args)))
         pass

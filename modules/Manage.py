@@ -17,32 +17,20 @@ from modules.AuthModule import AuthModule, get_target
 from exceptions import SakariException
 from subprocess import check_output, CalledProcessError
 import itertools
+from modules.Module import Command
 
 __author__ = 'Edoxile, windwarrior'
 
 
 class Manage(AuthModule):
-    def get_commands(self):
-        return [
-            ('list', self.list),
-            ('reload', self.reload),
-            ('load', self.load),
-            ('unload', self.unload),
-            ('join', self.join),
-            ('part', self.part),
-            ('die', self.die),
-            ('update', self.update)
-        ]
-
-    def get_hooks(self):
-        return []
-
+    @Command('die')
     def die(self, c, e, args):
         if not self.is_authorized(c, e, 5):
-            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            c.privmsg(get_target(c, e), "You don't have permission to let me die!")
             return
         self.bot.die()
 
+    @Command('reload')
     def reload(self, c, e, args):
         if not self.is_authorized(c, e, 5):
             c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
@@ -56,9 +44,10 @@ class Manage(AuthModule):
             except SakariException as ex:
                 c.privmsg(get_target(c, e), "Couldn't reload \x02{}\x0f: %s".format(m, ex.error))
 
+    @Command('load')
     def load(self, c, e, args):
         if not self.is_authorized(c, e, 5):
-            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            c.privmsg(get_target(c, e), "You don't have permission to load modules!")
             return
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
@@ -68,9 +57,10 @@ class Manage(AuthModule):
             except SakariException as ex:
                 c.privmsg(get_target(c, e), "Couldn't load \x02{}\x0f: {}".format(m, ex.error))
 
+    @Command('unload')
     def unload(self, c, e, args):
         if not self.is_authorized(c, e, 5):
-            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            c.privmsg(get_target(c, e), "You don't have permission to unload modules!")
             return
         modules = itertools.chain.from_iterable([n.split(',') for n in args])
         for m in modules:
@@ -80,11 +70,13 @@ class Manage(AuthModule):
             except SakariException as ex:
                 c.privmsg(get_target(c, e), "Couldn't unload \x02{}\x0f: {}".format(m, ex.error))
 
+    @Command('join')
     def join(self, c, e, args):
         print('Joining channels {}.'.format(args[0].split(',')))
         for ch in args[0].split(','):
             c.join(ch)
 
+    @Command('part')
     def part(self, c, e, args):
         if len(args) > 0:
             print('Parting channels {}.'.format(args[0].split(',')))
@@ -93,6 +85,7 @@ class Manage(AuthModule):
         else:
             c.part(e.target)
 
+    @Command('list')
     def list(self, c, e, args):
         if len(args) and args[0] == 'modules':
             ms = self.bot.modules.values()
@@ -102,9 +95,10 @@ class Manage(AuthModule):
         elif len(args) and args[0] == 'channels':
             c.privmsg(get_target(c, e), '\x02Channels:\x0f ' + ', '.join(self.bot.channels.keys()) + '.')
 
+    @Command('update')
     def update(self, c, e, args):
         if not self.is_authorized(c, e, 5):
-            c.privmsg(get_target(c, e), "You don't have permission to reload modules!")
+            c.privmsg(get_target(c, e), "You don't have permission to update!")
             return
         try:
             response = check_output(['git', 'pull'])

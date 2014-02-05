@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from exceptions import SakariException
-from modules.Module import Module, get_target
+from modules.Module import Module, get_target, Command
 from shodan import Shodan, APIError
 
 __author__ = 'Edoxile'
@@ -28,22 +28,15 @@ class ShodanIO(Module):
             raise SakariException('Couln\'t find api key for Shodan.')
         self.shodan = Shodan(self.key)
 
-    def get_commands(self):
-        return [
-            ('shodan', self.query),
-            ('shost', self.host)
-        ]
-
-    def get_hooks(self):
-        return []
-
+    @Command('shodan')
     def query(self, c, e, args):
         try:
-            result = self.shodan.search(' '.join(args))
-            c.privmsg(get_target(c, e), 'Found {} results.'.format(result['total']))
+            result = self.shodan.count(' '.join(args))
+            c.privmsg(get_target(c, e), 'Found {} results.'.format(result))
         except APIError as er:
             c.privmsg(get_target(c, e), '\x02Error:\x0f {}'.format(er.value))
 
+    @Command('shost', 'shodanhost')
     def host(self, c, e, args):
         try:
             result = self.shodan.host(args[0])

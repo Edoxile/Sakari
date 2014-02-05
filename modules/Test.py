@@ -13,20 +13,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from modules.Module import Module, get_target, Command
-import subprocess
+from modules.Module import Module, Command, get_target, Hook
 
 __author__ = 'Edoxile'
 
 
-class Python(Module):
-    @Command('py', 'python')
-    def run(self, c, e, args):
-        cmd = ' '.join(args).split(';')[0]
-        try:
-            c.privmsg(get_target(c, e),
-                      subprocess.check_output(['python', '-c', 'print({})'.format(cmd)]).decode('utf-8').replace('\n',
-                                                                                                                 ''))
-        except subprocess.CalledProcessError as ex:
-            c.privmsg(get_target(c, e),
-                      'Exception running python code: {}'.format(ex.output.decode('utf-8').replace('\n', ' ')))
+class Test(Module):
+    @Command('ping')
+    def test(self, c, e, args):
+        c.privmsg(get_target(c, e), 'pong')
+        pass
+
+    @Hook('pubmsg', 'privmsg')
+    def lulz(self, c, e, msg):
+        if msg == 'Sakari?':
+            c.privmsg(get_target(c, e), 'WHAT?')

@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import hashlib
-from modules.Module import Module, get_target
+from modules.Module import Module, get_target, Command
 import sqlite3
 
 __author__ = 'Edoxile'
@@ -27,17 +27,7 @@ class Auth(Module):
         # User 'objects' consist of a dict with {nick: (username, ip, level)}
         self.users = {}
 
-    def get_commands(self):
-        return [
-            ('login', self.login),
-            ('logout', self.logout),
-            ('whoami', self.whoami),
-            ('whois', self.whois)
-        ]
-
-    def get_hooks(self):
-        return []
-
+    @Command('login')
     def login(self, c, e, args):
         if e.source.nick in self.users.keys():
             c.privmsg(get_target(c, e), 'Already logged in as %s.' % self.users[e.source.nick][1])
@@ -53,6 +43,7 @@ class Auth(Module):
             else:
                 c.privmsg(get_target(c, e), 'The username/password combination is not known.')
 
+    @Command('logout')
     def logout(self, c, e, args):
         if e.source.nick in self.users.keys():
             del self.users[e.source.nick]
@@ -60,6 +51,7 @@ class Auth(Module):
         else:
             c.privmsg(get_target(c, e), "Can't log out if you aren't logged in...")
 
+    @Command('whoami')
     def whoami(self, c, e, args):
         if e.source.nick in self.users.keys():
             data = self.users[e.source.nick]
@@ -68,6 +60,7 @@ class Auth(Module):
         else:
             c.privmsg(get_target(c, e), 'You\'re not logged in at the moment')
 
+    @Command('whois')
     def whois(self, c, e, args):
         if args[0] in self.users.keys():
             data = self.users[e.source.nick]

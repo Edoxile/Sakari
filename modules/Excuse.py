@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from modules.Module import Module, get_target
+from modules.Module import Module, get_target, Command
 import random
 
 __author__ = 'Edoxile'
@@ -346,13 +346,6 @@ class Excuse(Module):
             'Leap second overloaded RHEL6 servers', 'DNS server drank too much and had a hiccup'
         ]
 
-    def get_hooks(self):
-        return []
-
-    def get_commands(self):
-        return [
-            ('?', self.excuse)
-        ]
-
+    @Command('?', 'excuse', 'why')
     def excuse(self, c, e, args):
         c.privmsg(get_target(c, e), self.excuses[random.randint(0, len(self.excuses))])

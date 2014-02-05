@@ -18,21 +18,53 @@ from abc import ABCMeta, abstractmethod
 __author__ = 'Edoxile'
 
 
-class Module:
-    __metaclass__ = ABCMeta
+class Command(object):
+    def __init__(self, *cmds):
+        self.commands = list(cmds)
 
+    def __call__(self, f):
+        f.__has_commands__ = True
+        f.__commands__ = self.commands
+        return f
+
+
+class Hook(object):
+    def __init__(self, *hks):
+        self.hooks = list(hks)
+
+    def __call__(self, f):
+        f.__has_hooks__ = True
+        f.__hooks__ = self.hooks
+        return f
+
+
+class Module:
     def __init__(self, b):
         self.bot = b
-        print('Module ' + self.get_name() + ' loaded successfully!')
         self.active = False
+        print('Module ' + self.get_name() + ' loaded successfully!')
 
-    @abstractmethod
+    def __new__(mcls, bot):
+        cls = super().__new__(mcls)
+        cls.commands = []
+        cls.hooks = dict()
+        for name in mcls.__dict__.keys():
+            fnc = mcls.__dict__[name]
+            if getattr(fnc, '__has_commands__', False):
+                cls.commands.append((fnc, fnc.__commands__))
+            if getattr(fnc, '__has_hooks__', False):
+                for hk in fnc.__hooks__:
+                    if hk not in cls.hooks.keys():
+                        cls.hooks[hk] = [fnc]
+                    else:
+                        cls.hooks[hk].append(fnc)
+        return cls
+
     def get_commands(self):
-        pass
+        return self.commands
 
-    @abstractmethod
     def get_hooks(self):
-        pass
+        return self.hooks
 
     def get_name(self):
         return self.__class__.__name__

@@ -151,13 +151,14 @@ class Sakari(irc.bot.SingleServerIRCBot):
             raise SakariException('Module {} not loaded!'.format(mn))
 
     def _run_hook(self, hook, c, e):
-        for f in self.hooks[hook]:
-            f(c, e, e.arguments[0])
+        for d in self.hooks[hook]:
+            for m in d.keys():
+                [f(m, c, e, e.arguments[0]) for f in d[m]]
 
     def _run_command(self, c, e, cmd, args):
         if cmd in self.commands.keys():
             (m, f) = self.commands[cmd]
-            f(c, e, args)
+            f(m, c, e, args)
 
     @staticmethod
     def _mod_import(name):
@@ -168,38 +169,27 @@ class Sakari(irc.bot.SingleServerIRCBot):
         return mod
 
     def _register_commands(self, m):
-        dupe = [i for i in [n[0] for n in m.get_commands()] if i in self.commands.keys()]
+        dupe = [i for n in m.get_commands() for i in n[1] if i in self.commands.keys()]
         if dupe:
             return dupe
         else:
-            for (c, f) in m.get_commands():
-                self.commands.update({c: (m, f)})
+            for (f, cmds) in m.get_commands():
+                for cmd in cmds:
+                    self.commands.update({cmd: (m, f)})
             return []
 
-    def _remove_commands(self, m, cmds=None):
-        if not cmds:
-            cmds = m.get_commands()
-        for (c, f) in cmds:
-            del self.commands[c]
+    def _remove_commands(self, m):
+        for cmd in [n for (f, n) in m.get_commands()]:
+            del self.commands[cmd]
 
     def _register_hooks(self, m):
         if m.get_hooks():
-            for (h, f) in m.get_hooks():
-                self.hooks[h].extend(f)
+            for h in [n for n in self.hooks if n in m.get_hooks().keys()]:
+                self.hooks[h].append({m: m.get_hooks()[h]})
 
-    def _remove_hooks(self, m, hks=None):
-        if not hks:
-            if m.get_hooks():
-                hks = m.get_hooks()
-            else:
-                return
-        for (h, f) in hks:
-            for ff in f:
-                try:
-                    self.hooks[h].remove(ff)
-                except ValueError:
-                    pass
-
+    def _remove_hooks(self, m):
+        for h in [n for n in self.hooks if n in m.get_hooks().keys()]:
+            del self.hooks[h][m]
 
 if __name__ == '__main__':
     sakari = Sakari()

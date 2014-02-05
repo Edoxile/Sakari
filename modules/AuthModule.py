@@ -21,16 +21,6 @@ __author__ = 'Edoxile'
 
 
 class AuthModule(Module):
-    __metaclass__ = ABCMeta
-
-    @abstractmethod
-    def get_commands(self):
-        pass
-
-    @abstractmethod
-    def get_hooks(self):
-        pass
-
     def get_auth_level(self, c, e):
         try:
             auth = self.bot.get_module('Auth')

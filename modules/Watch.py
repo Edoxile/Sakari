@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from modules.Module import Module, get_target
+from modules.Module import Module, get_target, Command, Hook
 import sqlite3
 
 __author__ = 'windwarrior'
@@ -34,18 +34,7 @@ class Watch(Module):
     def setup_database(self):
         self.sqlite.execute(table)
 
-    def get_commands(self):
-        return [
-            ('watch', self.watch),
-            ('watchlist', self.watchlist)
-        ]
-
-    def get_hooks(self):
-        return [
-            ('privmsg', [self.event]),
-            ('pubmsg', [self.event])
-        ]
-
+    @Command('watch')
     def watch(self, c, e, args):
         msg = "Setup watches for: "
         if len(args) > 0:
@@ -61,10 +50,12 @@ class Watch(Module):
         else:
             c.privmsg(get_target(c, e), '{}: you need to give me names of people to watch!'.format(e.source.nick))
 
+    @Command('watchlist')
     def watchlist(self, c, e, args):
         #Print a list of people you are watching
         pass
 
+    @Hook('pubmsg', 'privmsg')
     def event(self, c, e, msg):
         #Check if event originates from a watch, notify watchers, remove from db
         pass

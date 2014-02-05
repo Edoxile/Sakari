@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from modules.Module import Module, get_target
+from modules.Module import Module, get_target, Command
 import random
 import string
 from urllib import request
@@ -24,16 +24,7 @@ __author__ = 'windwarrior, Edoxile'
 
 
 class Random(Module):
-    def get_commands(self):
-        return [
-            ('random', self.random),
-            ('choose', self.choose),
-            ('ri', self.imgur)
-        ]
-
-    def get_hooks(self):
-        return []
-
+    @Command('random', 'r')
     def random(self, c, e, args):
         try:
             for i in range(len(args)):
@@ -50,6 +41,7 @@ class Random(Module):
             val = random.randint(args[0], args[1])
         c.privmsg(get_target(c, e), 'I choose \x02{}\x0f!'.format(val))
 
+    @Command('choose', 'c')
     def choose(self, c, e, args):
         if not len(args) > 0:
             c.privmsg(get_target(c, e), 'I need arguments to choose from!')
@@ -57,6 +49,7 @@ class Random(Module):
             ch = random.choice(args)
             c.privmsg(get_target(c, e), 'I choose \x02{}\x0f!'.format(ch))
 
+    @Command('ri', 'randomi', 'rimigur', 'randomimigur')
     def imgur(self, c, e, args):
         while True:
             url = 'http://i.imgur.com/' + ''.join(random.sample(string.ascii_letters + string.digits, 5)) + '.png'
