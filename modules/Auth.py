@@ -23,7 +23,6 @@ __author__ = 'Edoxile'
 class Auth(Module):
     def __init__(self, b):
         super().__init__(b)
-        self.sqlite = sqlite3.connect('sakari.sqlite')
         # User 'objects' consist of a dict with {nick: (username, ip, level)}
         self.users = {}
 
@@ -33,7 +32,7 @@ class Auth(Module):
             c.privmsg(get_target(c, e), 'Already logged in as %s.' % self.users[e.source.nick][1])
         else:
             args[1] = hashlib.sha512(args[1].encode('utf-8')).hexdigest()
-            cursor = self.sqlite.cursor()
+            cursor = self.bot.database.cursor()
             cursor.execute('SELECT level FROM users WHERE username=? AND password=?', (args[0], args[1]))
             level = cursor.fetchone()
             if level is not None:

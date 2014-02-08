@@ -20,6 +20,7 @@ import ssl
 import irc.bot
 import irc.connection
 import sys
+import sqlite3
 from modules.Module import Module
 from configparser import ConfigParser
 from exceptions import SakariException
@@ -36,6 +37,13 @@ class Sakari(irc.bot.SingleServerIRCBot):
     def __init__(self):
         self.config = ConfigParser()
         self.config.read('sakari.cfg')
+        self.hooks = {
+            'privmsg': [], 'pubmsg': [], 'error': [], 'join': [], 'kick': [], 'mode': [], 'part': [], 'privnotice': [],
+            'pubnotice': [], 'quit': [], 'invite': [], 'action': [], 'topic': [], 'nick': []
+        }
+        for h in self.hooks.keys():
+            if h != 'privmsg' and h != 'pubmsg':
+                setattr(Sakari, 'on_' + h, self.__pass_event)
 
         factory = irc.connection.Factory(wrapper=ssl.wrap_socket)
         irc.bot.SingleServerIRCBot.__init__(
@@ -46,11 +54,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
         self.prefix = self.config.get('bot', 'command_prefix')
         self.commands = dict()
         self.modules = dict()
-        self.hooks = {
-            'privmsg': [], 'pubmsg': [], 'error': [], 'join': [], 'kick': [], 'mode': [],
-            'part': [], 'privnotice': [], 'pubnotice': [], 'quit': [], 'invite': [], 'action': [],
-            'topic': [], 'nick': []
-        }
+        self.database = sqlite3.connect('sakari.sqlite')
         for m in self.config.get('bot', 'default_modules').split(','):
             try:
                 self.load_module(m)
@@ -67,49 +71,13 @@ class Sakari(irc.bot.SingleServerIRCBot):
         a = e.arguments[0].split(' ')
         if len(a[0]) > 1 and a[0][0] == self.prefix:
             self._run_command(c, e, a[0][1:], a[1:])
-        self._run_hook('privmsg', c, e)
+        self.__pass_event(c, e)
 
     def on_pubmsg(self, c, e):
         a = e.arguments[0].split(' ')
         if len(a[0]) > 1 and a[0][0] == self.prefix:
             self._run_command(c, e, a[0][1:], a[1:])
-        self._run_hook('pubmsg', c, e)
-
-    def on_error(self, c, e):
-        self._run_hook('error', c, e)
-
-    def on_join(self, c, e):
-        self._run_hook('join', c, e)
-
-    def on_kick(self, c, e):
-        self._run_hook('kick', c, e)
-
-    def on_mode(self, c, e):
-        self._run_hook('mode', c, e)
-
-    def on_part(self, c, e):
-        self._run_hook('part', c, e)
-
-    def on_privnotice(self, c, e):
-        self._run_hook('privnotice', c, e)
-
-    def on_pubbnotice(self, c, e):
-        self._run_hook('pubnotice', c, e)
-
-    def on_quit(self, c, e):
-        self._run_hook('quit', c, e)
-
-    def on_invite(self, c, e):
-        self._run_hook('invite', c, e)
-
-    def on_action(self, c, e):
-        self._run_hook('action', c, e)
-
-    def on_topic(self, c, e):
-        self._run_hook('topic', c, e)
-
-    def on_nick(self, c, e):
-        self._run_hook('nick', c, e)
+        self.__pass_event(c, e)
 
     def load_module(self, mn):
         if mn in self.modules.keys():
@@ -153,7 +121,7 @@ class Sakari(irc.bot.SingleServerIRCBot):
     def _run_hook(self, hook, c, e):
         for d in self.hooks[hook]:
             for m in d.keys():
-                [f(m, c, e, e.arguments[0]) for f in d[m]]
+                [f(m, c, e) for f in d[m]]
 
     def _run_command(self, c, e, cmd, args):
         if cmd in self.commands.keys():
@@ -190,6 +158,10 @@ class Sakari(irc.bot.SingleServerIRCBot):
     def _remove_hooks(self, m):
         for h in [n for n in self.hooks if n in m.get_hooks().keys()]:
             del self.hooks[h][m]
+
+    def __pass_event(self, c, e):
+        self._run_hook(e.type, c, e)
+
 
 if __name__ == '__main__':
     sakari = Sakari()

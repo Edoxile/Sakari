@@ -29,8 +29,8 @@ class Title(Module):
         self.re_html = re.compile('<title>(.+?)</title>')
 
     @Hook('pubmsg')
-    def get_title(self, c, e, msg):
-        m = self.re_title.search(msg)
+    def get_title(self, c, e):
+        m = self.re_title.search(e.arguments[0])
         if m:
             try:
                 url = request.urlopen(m.group(1))

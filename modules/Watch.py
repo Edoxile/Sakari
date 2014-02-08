@@ -56,6 +56,6 @@ class Watch(Module):
         pass
 
     @Hook('pubmsg', 'privmsg')
-    def event(self, c, e, msg):
+    def event(self, c, e):
         #Check if event originates from a watch, notify watchers, remove from db
         pass

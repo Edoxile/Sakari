@@ -25,6 +25,6 @@ class Test(Module):
         pass
 
     @Hook('pubmsg', 'privmsg')
-    def lulz(self, c, e, msg):
-        if msg == 'Sakari?':
+    def lulz(self, c, e):
+        if e.arguments[0] == 'Sakari?':
             c.privmsg(get_target(c, e), 'WHAT?')

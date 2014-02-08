@@ -32,7 +32,8 @@ class Quote(Module):
         }
 
     @Hook('pubmsg')
-    def handle_msg(self, c, e, msg):
+    def handle_msg(self, c, e):
+        msg = e.arguments[0]
         m = self.re_quote.match(msg)
         if m:
             if get_target(c, e) in self.buffer.keys() and m.group(1) in self.quote_commands.keys():

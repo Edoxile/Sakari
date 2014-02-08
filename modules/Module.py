@@ -18,26 +18,6 @@ from abc import ABCMeta, abstractmethod
 __author__ = 'Edoxile'
 
 
-class Command(object):
-    def __init__(self, *cmds):
-        self.commands = list(cmds)
-
-    def __call__(self, f):
-        f.__has_commands__ = True
-        f.__commands__ = self.commands
-        return f
-
-
-class Hook(object):
-    def __init__(self, *hks):
-        self.hooks = list(hks)
-
-    def __call__(self, f):
-        f.__has_hooks__ = True
-        f.__hooks__ = self.hooks
-        return f
-
-
 class Module:
     def __init__(self, b):
         self.bot = b
@@ -68,6 +48,26 @@ class Module:
 
     def get_name(self):
         return self.__class__.__name__
+
+
+class Command(object):
+    def __init__(self, *cmds):
+        self.commands = list(cmds)
+
+    def __call__(self, f):
+        f.__has_commands__ = True
+        f.__commands__ = self.commands
+        return f
+
+
+class Hook(object):
+    def __init__(self, *hks):
+        self.hooks = list(hks)
+
+    def __call__(self, f):
+        f.__has_hooks__ = True
+        f.__hooks__ = self.hooks
+        return f
 
 
 def get_target(c, e):
