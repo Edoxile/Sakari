@@ -41,7 +41,7 @@ class Random(Module):
             val = random.randint(args[0], args[1])
         c.privmsg(get_target(c, e), 'I choose \x02{}\x0f!'.format(val))
 
-    @Command('choose', 'c')
+    @Command('choose', 'ch')
     def choose(self, c, e, args):
         if not len(args) > 0:
             c.privmsg(get_target(c, e), 'I need arguments to choose from!')
